@@ -226,7 +226,7 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
         
         private void InitTypeTables()
         {
-            _typeNameTable = new string[40];
+            _typeNameTable = new string[42];
             _typeNameTable[0] = "Microsoft.UI.Xaml.Controls.XamlControlsResources";
             _typeNameTable[1] = "Microsoft.UI.Xaml.ResourceDictionary";
             _typeNameTable[2] = "Object";
@@ -265,10 +265,12 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
             _typeNameTable[35] = "Netplwiz.Views.MainPage";
             _typeNameTable[36] = "Microsoft.UI.Xaml.Controls.Page";
             _typeNameTable[37] = "Microsoft.UI.Xaml.Controls.UserControl";
-            _typeNameTable[38] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
-            _typeNameTable[39] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[38] = "Netplwiz.Views.UserPropertiesDialog";
+            _typeNameTable[39] = "Microsoft.UI.Xaml.Controls.ContentDialog";
+            _typeNameTable[40] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[41] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
 
-            _typeTable = new global::System.Type[40];
+            _typeTable = new global::System.Type[42];
             _typeTable[0] = typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources);
             _typeTable[1] = typeof(global::Microsoft.UI.Xaml.ResourceDictionary);
             _typeTable[2] = typeof(global::System.Object);
@@ -307,8 +309,10 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
             _typeTable[35] = typeof(global::Netplwiz.Views.MainPage);
             _typeTable[36] = typeof(global::Microsoft.UI.Xaml.Controls.Page);
             _typeTable[37] = typeof(global::Microsoft.UI.Xaml.Controls.UserControl);
-            _typeTable[38] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
-            _typeTable[39] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[38] = typeof(global::Netplwiz.Views.UserPropertiesDialog);
+            _typeTable[39] = typeof(global::Microsoft.UI.Xaml.Controls.ContentDialog);
+            _typeTable[40] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[41] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -354,7 +358,7 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
         private object Activate_30_TabViewItem() { return new global::Microsoft.UI.Xaml.Controls.TabViewItem(); }
         private object Activate_34_TabViewItemTemplateSettings() { return new global::Microsoft.UI.Xaml.Controls.TabViewItemTemplateSettings(); }
         private object Activate_35_MainPage() { return new global::Netplwiz.Views.MainPage(); }
-        private object Activate_38_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_40_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_XamlControlsResources() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources).TypeHandle);
         private void StaticInitializer_4_Color() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Windows.UI.Color).TypeHandle);
         private void StaticInitializer_5_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
@@ -378,8 +382,9 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
         private void StaticInitializer_30_TabViewItem() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TabViewItem).TypeHandle);
         private void StaticInitializer_34_TabViewItemTemplateSettings() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TabViewItemTemplateSettings).TypeHandle);
         private void StaticInitializer_35_MainPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Netplwiz.Views.MainPage).TypeHandle);
-        private void StaticInitializer_38_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
-        private void StaticInitializer_39_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
+        private void StaticInitializer_38_UserPropertiesDialog() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Netplwiz.Views.UserPropertiesDialog).TypeHandle);
+        private void StaticInitializer_40_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
+        private void StaticInitializer_41_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
         private void MapAdd_0_XamlControlsResources(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.Object, global::System.Object>)instance;
@@ -405,7 +410,7 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
             var newItem = (global::System.Object)item;
             collection.Add(newItem);
         }
-        private void VectorAdd_39_IList(object instance, object item)
+        private void VectorAdd_41_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -713,10 +718,21 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
                 xamlType = new global::Netplwiz.Netplwiz_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 38:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 38:   //  Netplwiz.Views.UserPropertiesDialog
+                userType = new global::Netplwiz.Netplwiz_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.ContentDialog"));
+                userType.StaticInitializer = StaticInitializer_38_UserPropertiesDialog;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 39:   //  Microsoft.UI.Xaml.Controls.ContentDialog
+                xamlType = new global::Netplwiz.Netplwiz_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 40:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::Netplwiz.Netplwiz_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_38_TreeViewNode;
-                userType.StaticInitializer = StaticInitializer_38_TreeViewNode;
+                userType.Activator = Activate_40_TreeViewNode;
+                userType.StaticInitializer = StaticInitializer_40_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -728,10 +744,10 @@ namespace Netplwiz.Netplwiz_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 39:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 41:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::Netplwiz.Netplwiz_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_39_IList;
-                userType.CollectionAdd = VectorAdd_39_IList;
+                userType.StaticInitializer = StaticInitializer_41_IList;
+                userType.CollectionAdd = VectorAdd_41_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;

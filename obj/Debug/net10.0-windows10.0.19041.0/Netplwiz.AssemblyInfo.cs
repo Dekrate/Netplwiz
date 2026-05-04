@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Netplwiz")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9a6b87ce5fedb57e43e91939d05018a574fc5280")]
 [assembly: System.Reflection.AssemblyProductAttribute("Netplwiz")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Netplwiz")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -101,7 +101,7 @@ namespace Netplwiz.ViewModels
         }
 
         [RelayCommand]
-        private async Task SaveAsync()
+        public async Task SaveAsync()
         {
             _logger.Information("Saving user: {UserName}", _originalUserName);
             IsSaving = true;

@@ -117,3 +117,8 @@ D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\pri.resfil
 D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\qualifiers.txt
 D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\qualifiers.txt.intermediate
 D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\MultipleQualifiersPerDimensionFound.txt
+D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\Views\UserPropertiesDialog.g.i.cs
+D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\Views\UserPropertiesDialog.g.cs
+D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\Views\UserPropertiesDialog.xaml
+D:\projekty edukacyjne\netplwiz\obj\Debug\net10.0-windows10.0.19041.0\Views\UserPropertiesDialog.xbf
+D:\projekty edukacyjne\netplwiz\bin\Debug\net10.0-windows10.0.19041.0\Views\UserPropertiesDialog.xbf

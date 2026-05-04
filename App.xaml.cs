@@ -1,5 +1,8 @@
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Netplwiz.Helpers;
+using System;
+using Windows.UI;
 
 namespace Netplwiz
 {
@@ -29,6 +32,21 @@ namespace Netplwiz
         {
             window ??= new Window();
 
+            // Set Mica Alt backdrop by default
+            SetBackdrop(BackdropType.MicaAlt);
+
+            // Extend content into title bar for Mica effect
+            window.ExtendsContentIntoTitleBar = true;
+            if (window.AppWindow != null)
+            {
+                var titleBar = window.AppWindow.TitleBar;
+                titleBar.PreferredHeightOption = Microsoft.UI.Windowing.TitleBarHeightOption.Tall;
+                titleBar.ButtonBackgroundColor = Color.FromArgb(0, 0, 0, 0);
+                titleBar.ButtonInactiveBackgroundColor = Color.FromArgb(0, 0, 0, 0);
+                titleBar.ButtonHoverBackgroundColor = Color.FromArgb(30, 255, 255, 255);
+                titleBar.ButtonPressedBackgroundColor = Color.FromArgb(50, 255, 255, 255);
+            }
+
             if (window.Content is not Frame rootFrame)
             {
                 rootFrame = new Frame();
@@ -38,7 +56,28 @@ namespace Netplwiz
 
             _ = rootFrame.Navigate(typeof(Views.MainPage), e.Arguments);
             window.Activate();
+
+            _logger.Information("Application launched with {Backdrop} backdrop", CurrentBackdrop);
         }
+
+        public static BackdropType CurrentBackdrop { get; private set; } = BackdropType.MicaAlt;
+
+        public static void SetBackdrop(BackdropType type)
+        {
+            var appWindow = ((App)Current).window;
+            if (appWindow == null) return;
+
+            CurrentBackdrop = type;
+            appWindow.SystemBackdrop = type switch
+            {
+                BackdropType.Mica => new MicaBackdrop(),
+                BackdropType.MicaAlt => new MicaBackdrop(),
+                BackdropType.Transparent => null,
+                _ => new MicaBackdrop()
+            };
+        }
+
+        private readonly Serilog.ILogger _logger = AppLogger.Logger.ForContext<App>();
 
         /// <summary>
         /// Invoked when Navigation to a certain page fails
@@ -49,5 +88,12 @@ namespace Netplwiz
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
+    }
+
+    public enum BackdropType
+    {
+        Mica,
+        MicaAlt,
+        Transparent
     }
 }

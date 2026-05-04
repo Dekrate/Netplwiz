@@ -36,8 +36,9 @@
 
             <!-- Users Tab -->
             <TabViewItem Header="Użytkownicy">
-                <Grid Padding="12">
+                <Grid Padding="12" RowSpacing="8">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
@@ -46,19 +47,17 @@
 
                     <TextBlock
                         Grid.Row="0"
-                        Margin="0,0,0,8"
                         Text="Poniższa lista umożliwia udzielanie lub odmawianie użytkownikom dostępu do tego komputera, zmianę haseł i innych ustawień."
                         TextWrapping="Wrap" />
 
                     <TextBlock
-                        Grid.Row="0"
-                        Margin="0,0,0,4"
+                        Grid.Row="1"
                         FontWeight="SemiBold"
                         Text="Użytkownicy tego komputera:" />
 
                     <ListView
                         x:Name="UsersListView"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Margin="0,4,0,8"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
@@ -93,7 +92,7 @@
                     </ListView>
 
                     <StackPanel
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Margin="0,4,0,8"
                         HorizontalAlignment="Center"
                         Orientation="Horizontal"
@@ -111,7 +110,7 @@
 
                     <!-- Password section for selected user -->
                     <Border
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Padding="12"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
@@ -256,8 +255,10 @@
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
                         CornerRadius="8">
-                        <Grid>
+                        <Grid RowSpacing="8">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
@@ -268,10 +269,10 @@
 
                             <FontIcon
                                 Grid.Row="0"
-                                Grid.RowSpan="2"
+                                Grid.RowSpan="4"
                                 Grid.Column="0"
                                 Margin="0,0,12,0"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Top"
                                 FontSize="24"
                                 Glyph="&#xE192;" />
 
@@ -283,14 +284,12 @@
                             <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Margin="0,4,0,0"
                                 Text="Aby zwiększyć bezpieczeństwo, możesz wymagać od użytkowników naciśnięcia klawiszy Ctrl+Alt+Delete przed logowaniem. To gwarantuje, że pojawi się autentyczny ekran logowania systemu Windows, co chroni system przed programami udającymi logowanie w celu uzyskania informacji o haśle."
                                 TextWrapping="Wrap" />
 
                             <CheckBox
-                                Grid.Row="1"
+                                Grid.Row="2"
                                 Grid.Column="1"
-                                Margin="0,8,0,0"
                                 HorizontalAlignment="Left"
                                 Content="Żądaj od użytkowników naciśnięcia klawiszy Ctrl+Alt+Delete"
                                 IsChecked="{Binding SecureLogonRequired, Mode=TwoWay}"
