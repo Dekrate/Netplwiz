@@ -4,11 +4,9 @@ using Netplwiz.Helpers;
 using Netplwiz.Models;
 using Netplwiz.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace Netplwiz.ViewModels
 {
@@ -46,8 +44,12 @@ namespace Netplwiz.ViewModels
             SecureLogonRequired = _userService.IsSecureLogonRequired();
         }
 
+        public event EventHandler<UserAccount>? RequestUserProperties;
+        public event EventHandler<UserAccount>? RequestRemoveUser;
+        public event EventHandler<UserAccount>? RequestResetPassword;
+
         [RelayCommand]
-        private async Task LoadUsersAsync()
+        public async Task LoadUsersAsync()
         {
             _logger.Information("Loading users...");
             IsLoading = true;
@@ -99,7 +101,7 @@ namespace Netplwiz.ViewModels
         {
             if (SelectedUser == null) return;
             _logger.Information("Remove user requested: {UserName}", SelectedUser.UserName);
-            // Dialog will be shown by view
+            RequestRemoveUser?.Invoke(this, SelectedUser);
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteUserAction))]
@@ -107,7 +109,7 @@ namespace Netplwiz.ViewModels
         {
             if (SelectedUser == null) return;
             _logger.Information("Properties requested for: {UserName}", SelectedUser.UserName);
-            // Navigation to properties dialog will be handled by view
+            RequestUserProperties?.Invoke(this, SelectedUser);
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteUserAction))]
@@ -115,7 +117,19 @@ namespace Netplwiz.ViewModels
         {
             if (SelectedUser == null) return;
             _logger.Information("Reset password requested for: {UserName}", SelectedUser.UserName);
-            // Dialog will be shown by view
+            RequestResetPassword?.Invoke(this, SelectedUser);
+        }
+
+        public bool DeleteUser(string userName)
+        {
+            _logger.Information("Executing delete user: {UserName}", userName);
+            return _userService.DeleteUser(userName);
+        }
+
+        public bool SetUserPassword(string userName, string newPassword)
+        {
+            _logger.Information("Executing set password for user: {UserName}", userName);
+            return _userService.SetPassword(userName, newPassword);
         }
 
         [RelayCommand]

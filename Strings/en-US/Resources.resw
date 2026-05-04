@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppTitle.Text" xml:space="preserve">
+    <value>User Accounts</value>
+  </data>
+  <data name="UsersTab.Header" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="AdvancedTab.Header" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="UsersDescription.Text" xml:space="preserve">
+    <value>The list below lets you grant or deny access to this computer, change passwords, and other settings.</value>
+  </data>
+  <data name="UsersLabel.Text" xml:space="preserve">
+    <value>Users on this computer:</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>Add...</value>
+  </data>
+  <data name="RemoveButton.Content" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="PropertiesButton.Content" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="PasswordSectionHeader.Text" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordSectionDescription.Text" xml:space="preserve">
+    <value>To change the password, press Ctrl+Alt+Del and select Change password.</value>
+  </data>
+  <data name="ResetPasswordButton.Content" xml:space="preserve">
+    <value>Reset password...</value>
+  </data>
+  <data name="ManagePasswordsDescription.Text" xml:space="preserve">
+    <value>You can manage passwords stored on this computer.</value>
+  </data>
+  <data name="ManagePasswordsButton.Content" xml:space="preserve">
+    <value>Manage passwords</value>
+  </data>
+  <data name="AdvancedManagementHeader.Text" xml:space="preserve">
+    <value>Advanced user management</value>
+  </data>
+  <data name="AdvancedManagementDescription.Text" xml:space="preserve">
+    <value>The Local Users and Groups snap-in can be used for advanced user management tasks.</value>
+  </data>
+  <data name="AdvancedManagementButton.Content" xml:space="preserve">
+    <value>Advanced...</value>
+  </data>
+  <data name="SecureLogonHeader.Text" xml:space="preserve">
+    <value>Secure logon</value>
+  </data>
+  <data name="SecureLogonDescription.Text" xml:space="preserve">
+    <value>To increase security, you can require users to press Ctrl+Alt+Delete before logging in. This ensures that an authentic Windows logon screen appears, protecting the system from programs that mimic logon to obtain password information.</value>
+  </data>
+  <data name="SecureLogonCheckBox.Content" xml:space="preserve">
+    <value>Require users to press Ctrl+Alt+Delete</value>
+  </data>
+  <data name="StatusLoading.Text" xml:space="preserve">
+    <value>Loading users...</value>
+  </data>
+  <data name="StatusLoaded.Text" xml:space="preserve">
+    <value>Loaded {0} users</value>
+  </data>
+  <data name="AboutButton.Content" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>Netplwiz Modern</value>
+  </data>
+  <data name="AboutVersion.Text" xml:space="preserve">
+    <value>Version 1.0.0</value>
+  </data>
+  <data name="AboutDescription.Text" xml:space="preserve">
+    <value>A modern version of the Windows user account management tool, built with WinUI 3 and Fluent Design.</value>
+  </data>
+  <data name="AboutGitHub.Content" xml:space="preserve">
+    <value>View on GitHub</value>
+  </data>
+  <data name="AboutLicense.Text" xml:space="preserve">
+    <value>MIT License</value>
+  </data>
+  <data name="DialogOk.Content" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="DialogCancel.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DialogYes.Content" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="DialogNo.Content" xml:space="preserve">
+    <value>No</value>
+  </data>
+</root>

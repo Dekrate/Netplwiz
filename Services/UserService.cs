@@ -2,8 +2,10 @@ using Netplwiz.Helpers;
 using Netplwiz.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Security.Principal;
 
 namespace Netplwiz.Services
 {
@@ -18,11 +20,33 @@ namespace Netplwiz.Services
         void SetSecureLogonRequired(bool required);
         void OpenCredentialManager();
         void OpenAdvancedUserManagement();
+        bool IsProtectedAccount(string userName);
     }
 
     public class UserService : IUserService
     {
+        private static readonly ReadOnlyCollection<string> ProtectedAccounts = new List<string>
+        {
+            "administrator",
+            "guest",
+            "defaultaccount",
+            "wdagutilityaccount"
+        }.AsReadOnly();
+
         private readonly Serilog.ILogger _logger = AppLogger.Logger.ForContext<UserService>();
+
+        public bool IsProtectedAccount(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName)) return true;
+            var normalized = userName.Trim().ToLowerInvariant();
+            if (ProtectedAccounts.Contains(normalized)) return true;
+
+            // Also protect the currently logged-in user
+            var currentName = Environment.UserName?.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(currentName) && normalized == currentName) return true;
+
+            return false;
+        }
 
         public List<UserAccount> GetLocalUsers()
         {
@@ -111,6 +135,12 @@ namespace Netplwiz.Services
         {
             _logger.Information("Deleting user: {UserName}", userName);
 
+            if (IsProtectedAccount(userName))
+            {
+                _logger.Warning("Delete blocked - protected account: {UserName}", userName);
+                return false;
+            }
+
             try
             {
                 using var context = new PrincipalContext(ContextType.Machine);
@@ -135,6 +165,18 @@ namespace Netplwiz.Services
         public bool SetPassword(string userName, string newPassword)
         {
             _logger.Information("Setting password for user: {UserName}", userName);
+
+            if (IsProtectedAccount(userName))
+            {
+                _logger.Warning("Password change blocked - protected account: {UserName}", userName);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                _logger.Warning("Password change blocked - empty password for: {UserName}", userName);
+                return false;
+            }
 
             try
             {

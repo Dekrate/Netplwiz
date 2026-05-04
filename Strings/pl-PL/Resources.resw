@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="AppTitle.Text" xml:space="preserve">
+    <value>Konta użytkowników</value>
+  </data>
+  <data name="UsersTab.Header" xml:space="preserve">
+    <value>Użytkownicy</value>
+  </data>
+  <data name="AdvancedTab.Header" xml:space="preserve">
+    <value>Zaawansowane</value>
+  </data>
+  <data name="UsersDescription.Text" xml:space="preserve">
+    <value>Poniższa lista umożliwia udzielanie lub odmawianie użytkownikom dostępu do tego komputera, zmianę haseł i innych ustawień.</value>
+  </data>
+  <data name="UsersLabel.Text" xml:space="preserve">
+    <value>Użytkownicy tego komputera:</value>
+  </data>
+  <data name="AddButton.Content" xml:space="preserve">
+    <value>Dodaj...</value>
+  </data>
+  <data name="RemoveButton.Content" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="PropertiesButton.Content" xml:space="preserve">
+    <value>Właściwości</value>
+  </data>
+  <data name="PasswordSectionHeader.Text" xml:space="preserve">
+    <value>Hasło</value>
+  </data>
+  <data name="PasswordSectionDescription.Text" xml:space="preserve">
+    <value>Aby zmienić hasło, naciśnij klawisze Ctrl+Alt+Del i wybierz opcję Zmień hasło.</value>
+  </data>
+  <data name="ResetPasswordButton.Content" xml:space="preserve">
+    <value>Resetuj hasło...</value>
+  </data>
+  <data name="ManagePasswordsDescription.Text" xml:space="preserve">
+    <value>Możesz zarządzać hasłami przechowywanymi na tym komputerze.</value>
+  </data>
+  <data name="ManagePasswordsButton.Content" xml:space="preserve">
+    <value>Zarządzaj hasłami</value>
+  </data>
+  <data name="AdvancedManagementHeader.Text" xml:space="preserve">
+    <value>Zaawansowane zarządzanie użytkownikami</value>
+  </data>
+  <data name="AdvancedManagementDescription.Text" xml:space="preserve">
+    <value>Przystawka Użytkownicy i grupy lokalne może służyć do wykonywania zaawansowanych zadań związanych z zarządzaniem użytkownikami.</value>
+  </data>
+  <data name="AdvancedManagementButton.Content" xml:space="preserve">
+    <value>Zaawansowane...</value>
+  </data>
+  <data name="SecureLogonHeader.Text" xml:space="preserve">
+    <value>Bezpieczne logowanie</value>
+  </data>
+  <data name="SecureLogonDescription.Text" xml:space="preserve">
+    <value>Aby zwiększyć bezpieczeństwo, możesz wymagać od użytkowników naciśnięcia klawiszy Ctrl+Alt+Delete przed logowaniem. To gwarantuje, że pojawi się autentyczny ekran logowania systemu Windows, co chroni system przed programami udającymi logowanie w celu uzyskania informacji o haśle.</value>
+  </data>
+  <data name="SecureLogonCheckBox.Content" xml:space="preserve">
+    <value>Żądaj od użytkowników naciśnięcia klawiszy Ctrl+Alt+Delete</value>
+  </data>
+  <data name="StatusLoading.Text" xml:space="preserve">
+    <value>Ładowanie użytkowników...</value>
+  </data>
+  <data name="StatusLoaded.Text" xml:space="preserve">
+    <value>Załadowano {0} użytkowników</value>
+  </data>
+  <data name="AboutButton.Content" xml:space="preserve">
+    <value>O programie</value>
+  </data>
+  <data name="AboutTitle.Text" xml:space="preserve">
+    <value>Netplwiz Modern</value>
+  </data>
+  <data name="AboutVersion.Text" xml:space="preserve">
+    <value>Wersja 1.0.0</value>
+  </data>
+  <data name="AboutDescription.Text" xml:space="preserve">
+    <value>Nowoczesna wersja narzędzia do zarządzania kontami użytkowników systemu Windows, zbudowana z WinUI 3 i Fluent Design.</value>
+  </data>
+  <data name="AboutGitHub.Content" xml:space="preserve">
+    <value>Zobacz na GitHub</value>
+  </data>
+  <data name="AboutLicense.Text" xml:space="preserve">
+    <value>Licencja MIT</value>
+  </data>
+  <data name="DialogOk.Content" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="DialogCancel.Content" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="DialogYes.Content" xml:space="preserve">
+    <value>Tak</value>
+  </data>
+  <data name="DialogNo.Content" xml:space="preserve">
+    <value>Nie</value>
+  </data>
+</root>

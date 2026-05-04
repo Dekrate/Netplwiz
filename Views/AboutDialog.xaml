@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentDialog
+    x:Class="Netplwiz.Views.AboutDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Netplwiz Modern"
+    PrimaryButtonText="OK"
+    DefaultButton="Primary">
+
+    <Grid RowSpacing="8" Padding="0,8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <FontIcon
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            FontSize="48"
+            Glyph="&#xE77B;" />
+
+        <TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            FontSize="18"
+            FontWeight="SemiBold"
+            Text="Netplwiz Modern" />
+
+        <TextBlock
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Text="Wersja 1.0.0" />
+
+        <TextBlock
+            Grid.Row="3"
+            HorizontalAlignment="Center"
+            TextWrapping="Wrap"
+            Text="Nowoczesna wersja narzędzia do zarządzania kontami użytkowników systemu Windows, zbudowana z WinUI 3 i Fluent Design." />
+
+        <HyperlinkButton
+            Grid.Row="4"
+            HorizontalAlignment="Center"
+            Content="Zobacz na GitHub"
+            NavigateUri="https://github.com" />
+    </Grid>
+</ContentDialog>
