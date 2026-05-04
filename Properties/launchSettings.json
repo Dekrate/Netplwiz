@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Netplwiz (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Netplwiz (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

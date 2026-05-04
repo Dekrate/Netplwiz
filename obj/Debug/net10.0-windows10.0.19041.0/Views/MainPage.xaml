@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="Netplwiz.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Netplwiz.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:MainViewModel />
+    </Page.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock
+            Grid.Row="0"
+            Margin="24,16,24,8"
+            FontSize="20"
+            FontWeight="SemiBold"
+            Text="Konta użytkowników" />
+
+        <!-- TabView -->
+        <TabView
+            Grid.Row="1"
+            Margin="12,0"
+            IsAddTabButtonVisible="False"
+            SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
+
+            <!-- Users Tab -->
+            <TabViewItem Header="Użytkownicy">
+                <Grid Padding="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="0,0,0,8"
+                        Text="Poniższa lista umożliwia udzielanie lub odmawianie użytkownikom dostępu do tego komputera, zmianę haseł i innych ustawień."
+                        TextWrapping="Wrap" />
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="0,0,0,4"
+                        FontWeight="SemiBold"
+                        Text="Użytkownicy tego komputera:" />
+
+                    <ListView x:ConnectionId='3'
+                        x:Name="UsersListView"
+                        Grid.Row="1"
+                        Margin="0,4,0,8"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        ItemsSource="{Binding Users}"
+                        SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+                        SelectionMode="Single">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <FontIcon
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Glyph="&#xE77B;" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding UserName}" />
+                                    <TextBlock
+                                        Grid.Column="2"
+                                        VerticalAlignment="Center"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{Binding GroupsDisplay}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackPanel
+                        Grid.Row="2"
+                        Margin="0,4,0,8"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                        <Button Command="{Binding AddUserCommand}" Content="Dodaj..." />
+                        <Button
+                            Command="{Binding RemoveUserCommand}"
+                            Content="Usuń"
+                            IsEnabled="{Binding SelectedUser, Converter={StaticResource ObjectToVisibilityConverter}, FallbackValue=False}" />
+                        <Button
+                            Command="{Binding PropertiesCommand}"
+                            Content="Właściwości"
+                            IsEnabled="{Binding SelectedUser, Converter={StaticResource ObjectToVisibilityConverter}, FallbackValue=False}" />
+                    </StackPanel>
+
+                    <!-- Password section for selected user -->
+                    <Border
+                        Grid.Row="3"
+                        Padding="12"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Visibility="{Binding SelectedUser, Converter={StaticResource ObjectToVisibilityConverter}}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <FontIcon
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Margin="0,0,12,0"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                Glyph="&#xE77B;" />
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontWeight="SemiBold">
+                                <Run Text="Hasło dla " />
+                                <Run Text="{Binding SelectedUser.UserName}" />
+                            </TextBlock>
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,4,0,0"
+                                Text="Aby zmienić hasło, naciśnij klawisze Ctrl+Alt+Del i wybierz opcję Zmień hasło."
+                                TextWrapping="Wrap" />
+
+                            <Button
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,8,0,0"
+                                HorizontalAlignment="Right"
+                                Command="{Binding ResetPasswordCommand}"
+                                Content="Resetuj hasło..." />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabViewItem>
+
+            <!-- Advanced Tab -->
+            <TabViewItem Header="Zaawansowane">
+                <Grid Padding="12" RowSpacing="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Passwords -->
+                    <Border
+                        Grid.Row="0"
+                        Padding="12"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.Row="0"
+                                Text="Możesz zarządzać hasłami przechowywanymi na tym komputerze."
+                                TextWrapping="Wrap" />
+                            <Button
+                                Grid.Row="1"
+                                Margin="0,8,0,0"
+                                HorizontalAlignment="Right"
+                                Command="{Binding ManagePasswordsCommand}"
+                                Content="Zarządzaj hasłami" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Advanced user management -->
+                    <Border
+                        Grid.Row="1"
+                        Padding="12"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <FontIcon
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Margin="0,0,12,0"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                Glyph="&#xE77B;" />
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontWeight="SemiBold"
+                                Text="Zaawansowane zarządzanie użytkownikami" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,4,0,0"
+                                Text="Przystawka Użytkownicy i grupy lokalne może służyć do wykonywania zaawansowanych zadań związanych z zarządzaniem użytkownikami."
+                                TextWrapping="Wrap" />
+
+                            <Button
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,8,0,0"
+                                HorizontalAlignment="Right"
+                                Command="{Binding AdvancedUserManagementCommand}"
+                                Content="Zaawansowane..." />
+                        </Grid>
+                    </Border>
+
+                    <!-- Secure logon -->
+                    <Border
+                        Grid.Row="2"
+                        Padding="12"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <FontIcon
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Margin="0,0,12,0"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                Glyph="&#xE192;" />
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontWeight="SemiBold"
+                                Text="Bezpieczne logowanie" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,4,0,0"
+                                Text="Aby zwiększyć bezpieczeństwo, możesz wymagać od użytkowników naciśnięcia klawiszy Ctrl+Alt+Delete przed logowaniem. To gwarantuje, że pojawi się autentyczny ekran logowania systemu Windows, co chroni system przed programami udającymi logowanie w celu uzyskania informacji o haśle."
+                                TextWrapping="Wrap" />
+
+                            <CheckBox x:ConnectionId='2'
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,8,0,0"
+                                HorizontalAlignment="Left"
+                                Content="Żądaj od użytkowników naciśnięcia klawiszy Ctrl+Alt+Delete"
+                                IsChecked="{Binding SecureLogonRequired, Mode=TwoWay}"
+                                                                     
+                                                                          />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabViewItem>
+        </TabView>
+
+        <!-- Status Bar -->
+        <Grid Grid.Row="2" Padding="12,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Grid.Column="0"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{Binding StatusMessage}" />
+            <ProgressRing
+                Grid.Column="1"
+                Width="16"
+                Height="16"
+                IsActive="{Binding IsLoading}" />
+        </Grid>
+    </Grid>
+</Page>
+
