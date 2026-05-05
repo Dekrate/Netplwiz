@@ -127,7 +127,15 @@ namespace Netplwiz.ViewModels
         public bool CreateLocalUser(string userName, string password, string fullName, string description, bool isAdmin)
         {
             _logger.Information("Creating local user: {UserName}", userName);
-            return _userService.AddLocalUser(userName, password, fullName, description, isAdmin);
+            try
+            {
+                return _userService.AddLocalUser(userName, password, fullName, description, isAdmin);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to create local user: {UserName}", userName);
+                return false;
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteUserAction))]

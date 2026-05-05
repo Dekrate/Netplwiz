@@ -17,6 +17,8 @@
         <RootNamespace>Netplwiz</RootNamespace>
 
         <!-- App Options -->
+        <SelfContained>true</SelfContained>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <UseRidGraph>true</UseRidGraph>
         <Platforms>x86;x64;ARM64</Platforms>
         <Platform>x64</Platform>

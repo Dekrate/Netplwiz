@@ -63,8 +63,7 @@ namespace Netplwiz.Views
             if (result == ContentDialogResult.Primary)
             {
                 _logger.Information("Adding local user {UserName}", dialog.NewUserName);
-                var success = await Task.Run(() =>
-                    ViewModel.CreateLocalUser(dialog.NewUserName, dialog.NewPassword, dialog.NewFullName, dialog.NewDescription, dialog.IsAdministrator));
+                var success = ViewModel.CreateLocalUser(dialog.NewUserName, dialog.NewPassword, dialog.NewFullName, dialog.NewDescription, dialog.IsAdministrator);
                 if (success)
                 {
                     _logger.Information("Local user {UserName} added successfully", dialog.NewUserName);
@@ -111,7 +110,7 @@ namespace Netplwiz.Views
             if (result == ContentDialogResult.Primary)
             {
                 _logger.Information("Confirming deletion of user {UserName}", user.UserName);
-                var success = await Task.Run(() => ViewModel.DeleteUser(user.UserName));
+                var success = ViewModel.DeleteUser(user.UserName);
                 if (success)
                 {
                     _logger.Information("User {UserName} deleted successfully", user.UserName);
@@ -134,7 +133,7 @@ namespace Netplwiz.Views
             {
                 var newPassword = dialog.NewPassword;
                 _logger.Information("Resetting password for {UserName}", user.UserName);
-                var success = await Task.Run(() => ViewModel.SetUserPassword(user.UserName, newPassword));
+                var success = ViewModel.SetUserPassword(user.UserName, newPassword);
                 if (success)
                 {
                     _logger.Information("Password reset successfully for {UserName}", user.UserName);
