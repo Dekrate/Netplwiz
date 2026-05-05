@@ -14,7 +14,7 @@ namespace Netplwiz
     /// </summary>
     public partial class App : Application
     {
-        private Window window = Window.Current;
+        private Window? window;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -33,7 +33,9 @@ namespace Netplwiz
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            window ??= new Window();
+            _logger.Information("OnLaunched started");
+
+            window = new Window();
 
             // Set Mica Alt backdrop by default, then load saved settings
             SetBackdrop(BackdropType.MicaAlt);
@@ -59,6 +61,7 @@ namespace Netplwiz
             }
 
             _ = rootFrame.Navigate(typeof(Views.MainPage), e.Arguments);
+            _logger.Information("MainPage navigated, activating window");
             window.Activate();
 
             _logger.Information("Application launched with {Backdrop} backdrop", CurrentBackdrop);
@@ -70,7 +73,11 @@ namespace Netplwiz
         public static void SetBackdrop(BackdropType type)
         {
             var appWindow = ((App)Current).window;
-            if (appWindow == null) return;
+            if (appWindow == null)
+            {
+                CurrentBackdrop = type;
+                return;
+            }
 
             CurrentBackdrop = type;
             appWindow.SystemBackdrop = type switch
@@ -81,8 +88,7 @@ namespace Netplwiz
                 _ => new MicaBackdrop { Kind = MicaKind.BaseAlt }
             };
 
-            var settings = ApplicationData.Current.LocalSettings;
-            settings.Values["Backdrop"] = type.ToString();
+            SaveSetting("Backdrop", type.ToString());
         }
 
         public static void SetTheme(ElementTheme theme)
@@ -91,25 +97,58 @@ namespace Netplwiz
             {
                 CurrentTheme = theme;
                 root.RequestedTheme = theme;
-                var settings = ApplicationData.Current.LocalSettings;
-                settings.Values["Theme"] = theme.ToString();
+                SaveSetting("Theme", theme.ToString());
             }
         }
 
         public static void LoadSettings()
         {
-            var settings = ApplicationData.Current.LocalSettings;
-
-            if (settings.Values.TryGetValue("Theme", out var themeValue) && themeValue is string themeStr)
+            if (LoadSetting("Theme") is string themeStr &&
+                Enum.TryParse<ElementTheme>(themeStr, out var theme))
             {
-                if (Enum.TryParse<ElementTheme>(themeStr, out var theme))
-                    SetTheme(theme);
+                SetTheme(theme);
             }
 
-            if (settings.Values.TryGetValue("Backdrop", out var backdropValue) && backdropValue is string backdropStr)
+            if (LoadSetting("Backdrop") is string backdropStr &&
+                Enum.TryParse<BackdropType>(backdropStr, out var backdrop))
             {
-                if (Enum.TryParse<BackdropType>(backdropStr, out var backdrop))
-                    SetBackdrop(backdrop);
+                SetBackdrop(backdrop);
+            }
+        }
+
+        private static readonly string SettingsPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Netplwiz", "settings.json");
+
+        private static void SaveSetting(string key, string value)
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(SettingsPath);
+                if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+                var settings = File.Exists(SettingsPath)
+                    ? System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(SettingsPath)) ?? new()
+                    : new Dictionary<string, string>();
+                settings[key] = value;
+                File.WriteAllText(SettingsPath, System.Text.Json.JsonSerializer.Serialize(settings));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to save setting: {ex.Message}");
+            }
+        }
+
+        private static string? LoadSetting(string key)
+        {
+            try
+            {
+                if (!File.Exists(SettingsPath)) return null;
+                var settings = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(SettingsPath));
+                return settings?.TryGetValue(key, out var value) == true ? value : null;
+            }
+            catch
+            {
+                return null;
             }
         }
 
