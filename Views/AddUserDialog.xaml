@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentDialog
+    x:Class="Netplwiz.Views.AddUserDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Dodaj użytkownika lokalnego"
+    CloseButtonText="Anuluj"
+    DefaultButton="Primary"
+    PrimaryButtonText="Dodaj"
+    mc:Ignorable="d"
+    CornerRadius="12"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+
+    <ContentDialog.PrimaryButtonStyle>
+        <Style BasedOn="{StaticResource AccentButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.PrimaryButtonStyle>
+    <ContentDialog.CloseButtonStyle>
+        <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.CloseButtonStyle>
+
+    <Grid RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBox
+            x:Name="UserNameTextBox"
+            Grid.Row="0"
+            Header="Nazwa użytkownika:" />
+
+        <TextBox
+            x:Name="FullNameTextBox"
+            Grid.Row="1"
+            Header="Imię i nazwisko:" />
+
+        <PasswordBox
+            x:Name="PasswordBox"
+            Grid.Row="2"
+            Header="Hasło:" />
+
+        <PasswordBox
+            x:Name="ConfirmPasswordBox"
+            Grid.Row="3"
+            Header="Potwierdź hasło:" />
+
+        <TextBox
+            x:Name="DescriptionTextBox"
+            Grid.Row="4"
+            Header="Opis:" />
+
+        <CheckBox
+            x:Name="AdminCheckBox"
+            Grid.Row="5"
+            Content="Administrator" />
+
+        <TextBlock
+            x:Name="ErrorTextBlock"
+            Grid.Row="6"
+            Foreground="{ThemeResource SystemErrorTextColor}"
+            TextWrapping="Wrap"
+            Visibility="Collapsed" />
+    </Grid>
+</ContentDialog>

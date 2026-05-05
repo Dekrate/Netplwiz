@@ -106,10 +106,10 @@ namespace Netplwiz.Tests
         }
 
         [TestMethod]
-        public void AddUserCommand_CallsService()
+        public void OpenAddUserSettingsCommand_CallsService()
         {
             var vm = new MainViewModel(_mockService.Object);
-            vm.AddUserCommand.Execute(null);
+            vm.OpenAddUserSettingsCommand.Execute(null);
             _mockService.Verify(s => s.OpenAddUserDialog(), Times.Once);
         }
 
@@ -127,6 +127,76 @@ namespace Netplwiz.Tests
             var vm = new MainViewModel(_mockService.Object);
             vm.AdvancedUserManagementCommand.Execute(null);
             _mockService.Verify(s => s.OpenAdvancedUserManagement(), Times.Once);
+        }
+
+        [TestMethod]
+        public void CreateLocalUser_CallsService_WithCorrectParameters()
+        {
+            _mockService.Setup(s => s.AddLocalUser("TestUser", "Pass123!", "Test Full", "Desc", true)).Returns(true);
+            var vm = new MainViewModel(_mockService.Object);
+
+            var result = vm.CreateLocalUser("TestUser", "Pass123!", "Test Full", "Desc", true);
+
+            Assert.IsTrue(result);
+            _mockService.Verify(s => s.AddLocalUser("TestUser", "Pass123!", "Test Full", "Desc", true), Times.Once);
+        }
+
+        [TestMethod]
+        public void CreateLocalUser_EmptyUserName_ReturnsFalse()
+        {
+            _mockService.Setup(s => s.AddLocalUser("", "Pass123!", "", "", false)).Returns(false);
+            var vm = new MainViewModel(_mockService.Object);
+
+            var result = vm.CreateLocalUser("", "Pass123!", "", "", false);
+
+            Assert.IsFalse(result);
+            _mockService.Verify(s => s.AddLocalUser("", "Pass123!", "", "", false), Times.Once);
+        }
+
+        [TestMethod]
+        public void CreateLocalUser_EmptyPassword_ReturnsFalse()
+        {
+            _mockService.Setup(s => s.AddLocalUser("TestUser", "", "", "", false)).Returns(false);
+            var vm = new MainViewModel(_mockService.Object);
+
+            var result = vm.CreateLocalUser("TestUser", "", "", "", false);
+
+            Assert.IsFalse(result);
+            _mockService.Verify(s => s.AddLocalUser("TestUser", "", "", "", false), Times.Once);
+        }
+
+        [TestMethod]
+        public void CreateLocalUser_UserAlreadyExists_ReturnsFalse()
+        {
+            _mockService.Setup(s => s.AddLocalUser("Existing", "Pass123!", "", "", false)).Returns(false);
+            var vm = new MainViewModel(_mockService.Object);
+
+            var result = vm.CreateLocalUser("Existing", "Pass123!", "", "", false);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void CreateLocalUser_ServiceThrows_ReturnsFalse()
+        {
+            _mockService.Setup(s => s.AddLocalUser("Crash", "Pass123!", "", "", false)).Throws(new System.InvalidOperationException("Boom"));
+            var vm = new MainViewModel(_mockService.Object);
+
+            var result = vm.CreateLocalUser("Crash", "Pass123!", "", "", false);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void AddLocalUserCommand_RaisesEvent()
+        {
+            var vm = new MainViewModel(_mockService.Object);
+            var eventFired = false;
+            vm.RequestAddLocalUser += (_, _) => eventFired = true;
+
+            vm.AddLocalUserCommand.Execute(null);
+
+            Assert.IsTrue(eventFired);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Netplwiz.Services
         void OpenCredentialManager();
         void OpenAdvancedUserManagement();
         void OpenAddUserDialog();
+        bool AddLocalUser(string userName, string password, string fullName, string description, bool isAdministrator);
         bool IsProtectedAccount(string userName);
     }
 
@@ -289,6 +290,69 @@ namespace Netplwiz.Services
             {
                 _logger.Error(ex, "Failed to open Add User dialog");
                 throw;
+            }
+        }
+
+        public bool AddLocalUser(string userName, string password, string fullName, string description, bool isAdministrator)
+        {
+            _logger.Information("Adding local user: {UserName}", userName);
+
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                _logger.Warning("Add user blocked - empty username");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                _logger.Warning("Add user blocked - empty password for: {UserName}", userName);
+                return false;
+            }
+
+            try
+            {
+                using var context = new PrincipalContext(ContextType.Machine);
+
+                var existing = UserPrincipal.FindByIdentity(context, userName);
+                if (existing != null)
+                {
+                    _logger.Warning("Add user blocked - user already exists: {UserName}", userName);
+                    return false;
+                }
+
+                var user = new UserPrincipal(context)
+                {
+                    SamAccountName = userName,
+                    DisplayName = fullName,
+                    Description = description,
+                    Enabled = true
+                };
+                user.SetPassword(password);
+                user.Save();
+
+                if (isAdministrator)
+                {
+                    var adminGroup = GroupPrincipal.FindByIdentity(context, "Administrators")
+                        ?? GroupPrincipal.FindByIdentity(context, "Administratorzy");
+                    if (adminGroup != null)
+                    {
+                        adminGroup.Members.Add(user);
+                        adminGroup.Save();
+                        _logger.Information("Added user {UserName} to administrators group", userName);
+                    }
+                    else
+                    {
+                        _logger.Warning("Could not find administrators group for user {UserName}", userName);
+                    }
+                }
+
+                _logger.Information("Local user added successfully: {UserName}", userName);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to add local user: {UserName}", userName);
+                return false;
             }
         }
 

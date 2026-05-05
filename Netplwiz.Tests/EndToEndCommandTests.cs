@@ -74,6 +74,27 @@ namespace Netplwiz.Tests
         }
 
         [TestMethod]
+        public void E2E_AddLocalUser_Flow()
+        {
+            _mock.Setup(s => s.AddLocalUser("Eve", "EvePass123!", "Eve Smith", "Dev", true)).Returns(true);
+
+            var result = _vm.CreateLocalUser("Eve", "EvePass123!", "Eve Smith", "Dev", true);
+
+            Assert.IsTrue(result);
+            _mock.Verify(s => s.AddLocalUser("Eve", "EvePass123!", "Eve Smith", "Dev", true), Times.Once);
+        }
+
+        [TestMethod]
+        public void E2E_AddLocalUser_Duplicate_Blocked()
+        {
+            _mock.Setup(s => s.AddLocalUser("Alice", "AnyPass123!", "", "", false)).Returns(false);
+
+            var result = _vm.CreateLocalUser("Alice", "AnyPass123!", "", "", false);
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
         public void E2E_AdvancedView_PressesAllButtons()
         {
             // Act: press "Manage Passwords"

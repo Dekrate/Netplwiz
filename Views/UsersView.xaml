@@ -68,9 +68,14 @@
             HorizontalAlignment="Center"
             Orientation="Horizontal"
             Spacing="8">
-            <Button
-                Command="{Binding AddUserCommand}"
-                x:Uid="AddButton" />
+            <DropDownButton x:Uid="AddButton">
+                <DropDownButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Dodaj użytkownika lokalnego..." Click="AddLocalUser_Click" />
+                        <MenuFlyoutItem Text="Dodaj przez Ustawienia Windows..." Click="AddViaSettings_Click" />
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
             <Button
                 Command="{Binding RemoveUserCommand}"
                 x:Uid="RemoveButton" />

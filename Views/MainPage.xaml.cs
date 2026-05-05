@@ -21,6 +21,7 @@ namespace Netplwiz.Views
             ViewModel.RequestUserProperties += OnRequestUserProperties;
             ViewModel.RequestRemoveUser += OnRequestRemoveUser;
             ViewModel.RequestResetPassword += OnRequestResetPassword;
+            ViewModel.RequestAddLocalUser += OnRequestAddLocalUser;
 
             // Initialize navigation
             MainNavigation.SelectedItem = UsersNavItem;
@@ -42,11 +43,39 @@ namespace Netplwiz.Views
             var vm = ViewModel;
             if (item == UsersNavItem)
             {
-                MainNavigation.Content = new UsersView { DataContext = vm };
+                var view = new UsersView { DataContext = vm };
+                view.RequestAddLocalUser += (_, _) => OnRequestAddLocalUser(this, EventArgs.Empty);
+                view.RequestAddViaSettings += (_, _) => vm.OpenAddUserSettingsCommand.Execute(null);
+                MainNavigation.Content = view;
             }
             else if (item == AdvancedNavItem)
             {
                 MainNavigation.Content = new AdvancedView { DataContext = vm };
+            }
+        }
+
+        private async void OnRequestAddLocalUser(object? sender, EventArgs e)
+        {
+            _logger.Information("Showing add local user dialog");
+            var dialog = new AddUserDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                _logger.Information("Adding local user {UserName}", dialog.NewUserName);
+                var success = await Task.Run(() =>
+                    ViewModel.CreateLocalUser(dialog.NewUserName, dialog.NewPassword, dialog.NewFullName, dialog.NewDescription, dialog.IsAdministrator));
+                if (success)
+                {
+                    _logger.Information("Local user {UserName} added successfully", dialog.NewUserName);
+                    ViewModel.StatusMessage = $"Użytkownik {dialog.NewUserName} został dodany";
+                    await ViewModel.LoadUsersAsync();
+                }
+                else
+                {
+                    _logger.Warning("Failed to add local user {UserName}", dialog.NewUserName);
+                    ViewModel.StatusMessage = "Nie udało się dodać użytkownika";
+                }
             }
         }
 

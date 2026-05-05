@@ -101,9 +101,9 @@ namespace Netplwiz.ViewModels
         }
 
         [RelayCommand]
-        private void AddUser()
+        private void OpenAddUserSettings()
         {
-            _logger.Information("Add user requested");
+            _logger.Information("Open add user settings requested");
             try
             {
                 _userService.OpenAddUserDialog();
@@ -113,6 +113,21 @@ namespace Netplwiz.ViewModels
                 _logger.Error(ex, "Failed to open add user dialog");
                 StatusMessage = $"Błąd: {ex.Message}";
             }
+        }
+
+        public event EventHandler? RequestAddLocalUser;
+
+        [RelayCommand]
+        private void AddLocalUser()
+        {
+            _logger.Information("Add local user requested");
+            RequestAddLocalUser?.Invoke(this, EventArgs.Empty);
+        }
+
+        public bool CreateLocalUser(string userName, string password, string fullName, string description, bool isAdmin)
+        {
+            _logger.Information("Creating local user: {UserName}", userName);
+            return _userService.AddLocalUser(userName, password, fullName, description, isAdmin);
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteUserAction))]
