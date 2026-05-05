@@ -84,14 +84,12 @@ namespace Netplwiz.Tests
             _vm.AdvancedUserManagementCommand.Execute(null);
             _mock.Verify(s => s.OpenAdvancedUserManagement(), Times.Once);
 
-            // Act: toggle secure logon checkbox (simulated by command)
+            // Act: toggle secure logon on
             _vm.SecureLogonRequired = true;
-            _vm.ToggleSecureLogonCommand.Execute(null);
             _mock.Verify(s => s.SetSecureLogonRequired(true), Times.Once);
 
             // Act: toggle back
             _vm.SecureLogonRequired = false;
-            _vm.ToggleSecureLogonCommand.Execute(null);
             _mock.Verify(s => s.SetSecureLogonRequired(false), Times.Once);
         }
 

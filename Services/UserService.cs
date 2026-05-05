@@ -20,6 +20,7 @@ namespace Netplwiz.Services
         void SetSecureLogonRequired(bool required);
         void OpenCredentialManager();
         void OpenAdvancedUserManagement();
+        void OpenAddUserDialog();
         bool IsProtectedAccount(string userName);
     }
 
@@ -269,6 +270,24 @@ namespace Netplwiz.Services
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to open Advanced User Management");
+                throw;
+            }
+        }
+
+        public void OpenAddUserDialog()
+        {
+            _logger.Information("Opening Add User dialog (ms-settings:otherusers)");
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "ms-settings:otherusers",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to open Add User dialog");
                 throw;
             }
         }

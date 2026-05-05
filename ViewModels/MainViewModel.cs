@@ -34,6 +34,8 @@ namespace Netplwiz.ViewModels
         [ObservableProperty]
         private int _selectedTabIndex;
 
+        private bool _isInitializing = true;
+
         public MainViewModel() : this(new UserService()) { }
 
         public MainViewModel(IUserService userService)
@@ -42,6 +44,30 @@ namespace Netplwiz.ViewModels
             _logger.Information("MainViewModel created");
             _ = LoadUsersAsync();
             SecureLogonRequired = _userService.IsSecureLogonRequired();
+            _isInitializing = false;
+        }
+
+        partial void OnSecureLogonRequiredChanged(bool value)
+        {
+            if (_isInitializing) return;
+
+            _logger.Information("Secure logon changed to: {Value}", value);
+            try
+            {
+                _userService.SetSecureLogonRequired(value);
+                StatusMessage = value
+                    ? "Wymagane naciśnięcie Ctrl+Alt+Del"
+                    : "Naciśnięcie Ctrl+Alt+Del nie jest wymagane";
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to toggle secure logon");
+                StatusMessage = $"Błąd: {ex.Message}";
+                // Revert without triggering another change
+                _isInitializing = true;
+                SecureLogonRequired = !value;
+                _isInitializing = false;
+            }
         }
 
         public event EventHandler<UserAccount>? RequestUserProperties;
@@ -83,11 +109,7 @@ namespace Netplwiz.ViewModels
             _logger.Information("Add user requested");
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = "ms-settings:otherusers",
-                    UseShellExecute = true
-                });
+                _userService.OpenAddUserDialog();
             }
             catch (Exception ex)
             {

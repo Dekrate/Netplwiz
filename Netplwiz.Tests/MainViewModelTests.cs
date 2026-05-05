@@ -106,24 +106,27 @@ namespace Netplwiz.Tests
         }
 
         [TestMethod]
-        public void AddUserCommand_DoesNotThrow()
+        public void AddUserCommand_CallsService()
         {
             var vm = new MainViewModel(_mockService.Object);
             vm.AddUserCommand.Execute(null);
+            _mockService.Verify(s => s.OpenAddUserDialog(), Times.Once);
         }
 
         [TestMethod]
-        public void ManagePasswordsCommand_DoesNotThrow()
+        public void ManagePasswordsCommand_CallsService()
         {
             var vm = new MainViewModel(_mockService.Object);
             vm.ManagePasswordsCommand.Execute(null);
+            _mockService.Verify(s => s.OpenCredentialManager(), Times.Once);
         }
 
         [TestMethod]
-        public void AdvancedUserManagementCommand_DoesNotThrow()
+        public void AdvancedUserManagementCommand_CallsService()
         {
             var vm = new MainViewModel(_mockService.Object);
             vm.AdvancedUserManagementCommand.Execute(null);
+            _mockService.Verify(s => s.OpenAdvancedUserManagement(), Times.Once);
         }
     }
 }

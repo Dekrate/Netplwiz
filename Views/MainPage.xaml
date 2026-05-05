@@ -310,8 +310,6 @@
                                 Grid.Column="1"
                                 HorizontalAlignment="Left"
                                 IsChecked="{Binding SecureLogonRequired, Mode=TwoWay}"
-                                Checked="SecureLogonCheckBox_Checked"
-                                Unchecked="SecureLogonCheckBox_Unchecked"
                                 x:Uid="SecureLogonCheckBox" />
                         </Grid>
                     </Border>

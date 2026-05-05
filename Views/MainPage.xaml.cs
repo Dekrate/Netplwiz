@@ -94,18 +94,6 @@ namespace Netplwiz.Views
             }
         }
 
-        private void SecureLogonCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            _logger.Debug("SecureLogon checkbox checked");
-            ViewModel.ToggleSecureLogonCommand.Execute(null);
-        }
-
-        private void SecureLogonCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            _logger.Debug("SecureLogon checkbox unchecked");
-            ViewModel.ToggleSecureLogonCommand.Execute(null);
-        }
-
         private async void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             _logger.Information("Showing Settings dialog");
