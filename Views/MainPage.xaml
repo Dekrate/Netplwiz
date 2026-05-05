@@ -12,17 +12,18 @@
         <vm:MainViewModel />
     </Page.DataContext>
 
-    <Grid>
+    <Grid Padding="0,48,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Title + About -->
+        <!-- Title + About + Settings -->
         <Grid Grid.Row="0" Margin="24,16,24,8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock
@@ -33,6 +34,12 @@
                 x:Uid="AppTitle" />
             <Button
                 Grid.Column="1"
+                Margin="0,0,8,0"
+                VerticalAlignment="Center"
+                Click="SettingsButton_Click"
+                x:Uid="SettingsButton" />
+            <Button
+                Grid.Column="2"
                 VerticalAlignment="Center"
                 Click="AboutButton_Click"
                 x:Uid="AboutButton" />
@@ -113,11 +120,9 @@
                             x:Uid="AddButton" />
                         <Button
                             Command="{Binding RemoveUserCommand}"
-                            IsEnabled="{Binding SelectedUser, Converter={StaticResource ObjectToVisibilityConverter}, FallbackValue=False}"
                             x:Uid="RemoveButton" />
                         <Button
                             Command="{Binding PropertiesCommand}"
-                            IsEnabled="{Binding SelectedUser, Converter={StaticResource ObjectToVisibilityConverter}, FallbackValue=False}"
                             x:Uid="PropertiesButton" />
                     </StackPanel>
 

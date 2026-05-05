@@ -8,7 +8,8 @@
     mc:Ignorable="d"
     Title="Netplwiz Modern"
     PrimaryButtonText="OK"
-    DefaultButton="Primary">
+    DefaultButton="Primary"
+    CornerRadius="12">
 
     <Grid RowSpacing="8" Padding="0,8">
         <Grid.RowDefinitions>

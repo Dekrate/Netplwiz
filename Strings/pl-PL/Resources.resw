@@ -93,4 +93,31 @@
   <data name="DialogNo.Content" xml:space="preserve">
     <value>Nie</value>
   </data>
+  <data name="SettingsButton.Content" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
+  <data name="ThemeLabel.Text" xml:space="preserve">
+    <value>Tryb wyglądu</value>
+  </data>
+  <data name="ThemeLight.Content" xml:space="preserve">
+    <value>Jasny</value>
+  </data>
+  <data name="ThemeDark.Content" xml:space="preserve">
+    <value>Ciemny</value>
+  </data>
+  <data name="ThemeAuto.Content" xml:space="preserve">
+    <value>Automatyczny</value>
+  </data>
+  <data name="BackdropLabel.Text" xml:space="preserve">
+    <value>Tło okna</value>
+  </data>
+  <data name="BackdropMica.Content" xml:space="preserve">
+    <value>Mica</value>
+  </data>
+  <data name="BackdropMicaAlt.Content" xml:space="preserve">
+    <value>Mica Alt</value>
+  </data>
+  <data name="BackdropTransparent.Content" xml:space="preserve">
+    <value>Przezroczyste</value>
+  </data>
 </root>

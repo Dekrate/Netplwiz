@@ -1,7 +1,10 @@
+using Microsoft.UI.Composition.SystemBackdrops;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Netplwiz.Helpers;
 using System;
+using Windows.Storage;
 using Windows.UI;
 
 namespace Netplwiz
@@ -32,8 +35,9 @@ namespace Netplwiz
         {
             window ??= new Window();
 
-            // Set Mica Alt backdrop by default
+            // Set Mica Alt backdrop by default, then load saved settings
             SetBackdrop(BackdropType.MicaAlt);
+            LoadSettings();
 
             // Extend content into title bar for Mica effect
             window.ExtendsContentIntoTitleBar = true;
@@ -61,6 +65,7 @@ namespace Netplwiz
         }
 
         public static BackdropType CurrentBackdrop { get; private set; } = BackdropType.MicaAlt;
+        public static ElementTheme CurrentTheme { get; private set; } = ElementTheme.Default;
 
         public static void SetBackdrop(BackdropType type)
         {
@@ -70,11 +75,42 @@ namespace Netplwiz
             CurrentBackdrop = type;
             appWindow.SystemBackdrop = type switch
             {
-                BackdropType.Mica => new MicaBackdrop(),
-                BackdropType.MicaAlt => new MicaBackdrop(),
+                BackdropType.Mica => new MicaBackdrop { Kind = MicaKind.Base },
+                BackdropType.MicaAlt => new MicaBackdrop { Kind = MicaKind.BaseAlt },
                 BackdropType.Transparent => null,
-                _ => new MicaBackdrop()
+                _ => new MicaBackdrop { Kind = MicaKind.BaseAlt }
             };
+
+            var settings = ApplicationData.Current.LocalSettings;
+            settings.Values["Backdrop"] = type.ToString();
+        }
+
+        public static void SetTheme(ElementTheme theme)
+        {
+            if (Current is App app && app.window?.Content is FrameworkElement root)
+            {
+                CurrentTheme = theme;
+                root.RequestedTheme = theme;
+                var settings = ApplicationData.Current.LocalSettings;
+                settings.Values["Theme"] = theme.ToString();
+            }
+        }
+
+        public static void LoadSettings()
+        {
+            var settings = ApplicationData.Current.LocalSettings;
+
+            if (settings.Values.TryGetValue("Theme", out var themeValue) && themeValue is string themeStr)
+            {
+                if (Enum.TryParse<ElementTheme>(themeStr, out var theme))
+                    SetTheme(theme);
+            }
+
+            if (settings.Values.TryGetValue("Backdrop", out var backdropValue) && backdropValue is string backdropStr)
+            {
+                if (Enum.TryParse<BackdropType>(backdropStr, out var backdrop))
+                    SetBackdrop(backdrop);
+            }
         }
 
         private readonly Serilog.ILogger _logger = AppLogger.Logger.ForContext<App>();

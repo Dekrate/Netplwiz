@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentDialog
+    x:Class="Netplwiz.Views.SettingsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Ustawienia"
+    PrimaryButtonText="OK"
+    DefaultButton="Primary"
+    CornerRadius="12"
+    mc:Ignorable="d">
+
+    <Grid RowSpacing="16" Padding="0,8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" RowSpacing="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                FontWeight="SemiBold"
+                x:Uid="ThemeLabel" />
+            <ComboBox
+                x:Name="ThemeComboBox"
+                Grid.Row="1"
+                Margin="0,4,0,0"
+                HorizontalAlignment="Stretch">
+                <ComboBoxItem x:Uid="ThemeLight" Tag="Light" />
+                <ComboBoxItem x:Uid="ThemeDark" Tag="Dark" />
+                <ComboBoxItem x:Uid="ThemeAuto" Tag="Default" />
+            </ComboBox>
+        </Grid>
+
+        <Grid Grid.Row="1" RowSpacing="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                FontWeight="SemiBold"
+                x:Uid="BackdropLabel" />
+            <ComboBox
+                x:Name="BackdropComboBox"
+                Grid.Row="1"
+                Margin="0,4,0,0"
+                HorizontalAlignment="Stretch">
+                <ComboBoxItem x:Uid="BackdropMica" Tag="Mica" />
+                <ComboBoxItem x:Uid="BackdropMicaAlt" Tag="MicaAlt" />
+                <ComboBoxItem x:Uid="BackdropTransparent" Tag="Transparent" />
+            </ComboBox>
+        </Grid>
+    </Grid>
+</ContentDialog>

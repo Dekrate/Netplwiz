@@ -106,6 +106,20 @@ namespace Netplwiz.Views
             ViewModel.ToggleSecureLogonCommand.Execute(null);
         }
 
+        private async void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            _logger.Information("Showing Settings dialog");
+            var dialog = new SettingsDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                App.SetTheme(dialog.SelectedTheme);
+                App.SetBackdrop(dialog.SelectedBackdrop);
+                _logger.Information("Applied theme {Theme} and backdrop {Backdrop}", dialog.SelectedTheme, dialog.SelectedBackdrop);
+            }
+        }
+
         private async void AboutButton_Click(object sender, RoutedEventArgs e)
         {
             _logger.Information("Showing About dialog");
