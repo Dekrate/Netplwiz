@@ -3,10 +3,10 @@
   <data name="AppTitle.Text" xml:space="preserve">
     <value>User Accounts</value>
   </data>
-  <data name="UsersTab.Header" xml:space="preserve">
+  <data name="UsersTab.Content" xml:space="preserve">
     <value>Users</value>
   </data>
-  <data name="AdvancedTab.Header" xml:space="preserve">
+  <data name="AdvancedTab.Content" xml:space="preserve">
     <value>Advanced</value>
   </data>
   <data name="UsersDescription.Text" xml:space="preserve">

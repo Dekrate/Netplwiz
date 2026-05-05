@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="Netplwiz.Views.UserPropertiesGroupsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="8" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            Text="Jakiego poziomu dostępu chcesz udzielić temu użytkownikowi?"
+            TextWrapping="Wrap" />
+
+        <StackPanel Grid.Row="1" Spacing="4">
+            <RadioButton
+                Content="Użytkownik standardowy"
+                GroupName="UserType"
+                IsChecked="{Binding IsStandardUser, Mode=TwoWay}" />
+            <TextBlock
+                Margin="28,0,0,0"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="Użytkownicy kont standardowych mogą korzystać z większości oprogramowania i zmieniać ustawienia systemowe, które nie dotyczą innych użytkowników."
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Spacing="4">
+            <RadioButton
+                Content="Administrator"
+                GroupName="UserType"
+                IsChecked="{Binding IsAdministrator, Mode=TwoWay}" />
+            <TextBlock
+                Margin="28,0,0,0"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="Administratorzy mają pełny dostęp do komputera i mogą wprowadzać wszystkie żądane zmiany. W zależności od ustawień powiadamiania, administratorzy mogą być proszeni o podanie hasła lub potwierdzenie przed wprowadzeniem zmian dotyczących innych użytkowników."
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Grid Grid.Row="3" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <RadioButton
+                Grid.Column="0"
+                Content="Inny:"
+                GroupName="UserType"
+                IsChecked="{Binding IsOtherGroup, Mode=TwoWay}" />
+            <ComboBox
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                IsEnabled="{Binding IsOtherGroup}"
+                ItemsSource="{Binding AvailableGroups}"
+                SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" />
+        </Grid>
+    </Grid>
+</UserControl>

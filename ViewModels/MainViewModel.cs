@@ -31,9 +31,6 @@ namespace Netplwiz.ViewModels
         [ObservableProperty]
         private bool _secureLogonRequired;
 
-        [ObservableProperty]
-        private int _selectedTabIndex;
-
         private bool _isInitializing = true;
 
         public MainViewModel() : this(new UserService()) { }

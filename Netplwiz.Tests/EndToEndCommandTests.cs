@@ -74,7 +74,7 @@ namespace Netplwiz.Tests
         }
 
         [TestMethod]
-        public void E2E_AdvancedTab_PressesAllButtons()
+        public void E2E_AdvancedView_PressesAllButtons()
         {
             // Act: press "Manage Passwords"
             _vm.ManagePasswordsCommand.Execute(null);

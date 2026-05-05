@@ -17,7 +17,32 @@ namespace Netplwiz.Views
             _logger.Information("UserPropertiesDialog initializing for user: {UserName}", user.UserName);
             this.InitializeComponent();
             this.DataContext = new UserPropertiesViewModel(user, new UserService());
+
+            PropertiesNavigation.SelectedItem = GeneralNavItem;
+            UpdateContent(GeneralNavItem);
+
             _logger.Information("UserPropertiesDialog initialized");
+        }
+
+        private void PropertiesNavigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            if (args.SelectedItem is NavigationViewItem item)
+            {
+                UpdateContent(item);
+            }
+        }
+
+        private void UpdateContent(NavigationViewItem item)
+        {
+            var vm = (UserPropertiesViewModel)DataContext;
+            if (item == GeneralNavItem)
+            {
+                PropertiesNavigation.Content = new UserPropertiesGeneralView { DataContext = vm };
+            }
+            else if (item == GroupsNavItem)
+            {
+                PropertiesNavigation.Content = new UserPropertiesGroupsView { DataContext = vm };
+            }
         }
 
         public static async Task ShowAsync(UserAccount user)

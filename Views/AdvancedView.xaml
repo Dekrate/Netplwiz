@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="Netplwiz.Views.AdvancedView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="12" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Passwords -->
+        <Border
+            Grid.Row="0"
+            Padding="12"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    x:Uid="ManagePasswordsDescription"
+                    TextWrapping="Wrap" />
+                <Button
+                    Grid.Row="1"
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding ManagePasswordsCommand}"
+                    x:Uid="ManagePasswordsButton" />
+            </Grid>
+        </Border>
+
+        <!-- Advanced user management -->
+        <Border
+            Grid.Row="1"
+            Padding="12"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <FontIcon
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Center"
+                    FontSize="24"
+                    Glyph="&#xE77B;" />
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    FontWeight="SemiBold"
+                    x:Uid="AdvancedManagementHeader" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,4,0,0"
+                    x:Uid="AdvancedManagementDescription"
+                    TextWrapping="Wrap" />
+
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding AdvancedUserManagementCommand}"
+                    x:Uid="AdvancedManagementButton" />
+            </Grid>
+        </Border>
+
+        <!-- Secure logon -->
+        <Border
+            Grid.Row="2"
+            Padding="12"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <Grid RowSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <FontIcon
+                    Grid.Row="0"
+                    Grid.RowSpan="4"
+                    Grid.Column="0"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Top"
+                    FontSize="24"
+                    Glyph="&#xE192;" />
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    FontWeight="SemiBold"
+                    x:Uid="SecureLogonHeader" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    x:Uid="SecureLogonDescription"
+                    TextWrapping="Wrap" />
+
+                <CheckBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding SecureLogonRequired, Mode=TwoWay}"
+                    x:Uid="SecureLogonCheckBox" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

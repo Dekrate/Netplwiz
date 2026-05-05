@@ -13,112 +13,27 @@
     mc:Ignorable="d"
     CornerRadius="12">
 
-    <TabView IsAddTabButtonVisible="False">
-        <TabViewItem Header="Ogólne">
-            <Grid Padding="8" RowSpacing="12">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+    <ContentDialog.PrimaryButtonStyle>
+        <Style BasedOn="{StaticResource AccentButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.PrimaryButtonStyle>
+    <ContentDialog.CloseButtonStyle>
+        <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.CloseButtonStyle>
 
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="0,0,12,0"
-                    VerticalAlignment="Center"
-                    Text="Nazwa użytkownika:" />
-                <TextBox
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    IsReadOnly="True"
-                    Text="{Binding UserName}" />
-
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="0,0,12,0"
-                    VerticalAlignment="Center"
-                    Text="Imię i nazwisko:" />
-                <TextBox
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Text="{Binding FullName, Mode=TwoWay}" />
-
-                <TextBlock
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Margin="0,0,12,0"
-                    VerticalAlignment="Center"
-                    Text="Opis:" />
-                <TextBox
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    AcceptsReturn="True"
-                    Text="{Binding Description, Mode=TwoWay}" />
-            </Grid>
-        </TabViewItem>
-
-        <TabViewItem Header="Członkostwo w grupie">
-            <Grid Padding="8" RowSpacing="16">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <TextBlock
-                    Grid.Row="0"
-                    Text="Jakiego poziomu dostępu chcesz udzielić temu użytkownikowi?"
-                    TextWrapping="Wrap" />
-
-                <StackPanel Grid.Row="1" Spacing="4">
-                    <RadioButton
-                        Content="Użytkownik standardowy"
-                        GroupName="UserType"
-                        IsChecked="{Binding IsStandardUser, Mode=TwoWay}" />
-                    <TextBlock
-                        Margin="28,0,0,0"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        Text="Użytkownicy kont standardowych mogą korzystać z większości oprogramowania i zmieniać ustawienia systemowe, które nie dotyczą innych użytkowników."
-                        TextWrapping="Wrap" />
-                </StackPanel>
-
-                <StackPanel Grid.Row="2" Spacing="4">
-                    <RadioButton
-                        Content="Administrator"
-                        GroupName="UserType"
-                        IsChecked="{Binding IsAdministrator, Mode=TwoWay}" />
-                    <TextBlock
-                        Margin="28,0,0,0"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        Text="Administratorzy mają pełny dostęp do komputera i mogą wprowadzać wszystkie żądane zmiany. W zależności od ustawień powiadamiania, administratorzy mogą być proszeni o podanie hasła lub potwierdzenie przed wprowadzeniem zmian dotyczących innych użytkowników."
-                        TextWrapping="Wrap" />
-                </StackPanel>
-
-                <Grid Grid.Row="3" ColumnSpacing="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <RadioButton
-                        Grid.Column="0"
-                        Content="Inny:"
-                        GroupName="UserType"
-                        IsChecked="{Binding IsOtherGroup, Mode=TwoWay}" />
-                    <ComboBox
-                        Grid.Column="1"
-                        VerticalAlignment="Center"
-                        IsEnabled="{Binding IsOtherGroup}"
-                        ItemsSource="{Binding AvailableGroups}"
-                        SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" />
-                </Grid>
-            </Grid>
-        </TabViewItem>
-    </TabView>
+    <NavigationView
+        x:Name="PropertiesNavigation"
+        PaneDisplayMode="Top"
+        IsBackButtonVisible="Collapsed"
+        IsSettingsVisible="False"
+        SelectionChanged="PropertiesNavigation_SelectionChanged">
+        <NavigationView.MenuItems>
+            <NavigationViewItem x:Name="GeneralNavItem" Content="Ogólne" />
+            <NavigationViewItem x:Name="GroupsNavItem" Content="Członkostwo w grupie" />
+        </NavigationView.MenuItems>
+        <Grid x:Name="ContentRoot" Padding="8,0,8,8" />
+    </NavigationView>
 </ContentDialog>

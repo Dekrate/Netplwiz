@@ -22,7 +22,32 @@ namespace Netplwiz.Views
             ViewModel.RequestRemoveUser += OnRequestRemoveUser;
             ViewModel.RequestResetPassword += OnRequestResetPassword;
 
+            // Initialize navigation
+            MainNavigation.SelectedItem = UsersNavItem;
+            UpdateContent(UsersNavItem);
+
             _logger.Information("MainPage initialized");
+        }
+
+        private void MainNavigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            if (args.SelectedItem is NavigationViewItem item)
+            {
+                UpdateContent(item);
+            }
+        }
+
+        private void UpdateContent(NavigationViewItem item)
+        {
+            var vm = ViewModel;
+            if (item == UsersNavItem)
+            {
+                MainNavigation.Content = new UsersView { DataContext = vm };
+            }
+            else if (item == AdvancedNavItem)
+            {
+                MainNavigation.Content = new AdvancedView { DataContext = vm };
+            }
         }
 
         private MainViewModel ViewModel => (MainViewModel)(this.DataContext ?? throw new InvalidOperationException("DataContext is null"));
