@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -52,5 +53,16 @@
             Grid.Column="1"
             AcceptsReturn="True"
             Text="{Binding Description, Mode=TwoWay}" />
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="0,0,12,0"
+            VerticalAlignment="Center"
+            Text="Wymagaj zmiany hasła:" />
+        <ToggleSwitch
+            Grid.Row="3"
+            Grid.Column="1"
+            IsOn="{Binding PasswordChangeRequired, Mode=TwoWay}" />
     </Grid>
 </UserControl>

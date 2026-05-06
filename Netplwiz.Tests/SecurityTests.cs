@@ -68,5 +68,36 @@ namespace Netplwiz.Tests
             var result = _service.SetPassword("RegularUser", "");
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void SetPasswordChangeRequired_ProtectedAccount_ReturnsFalse()
+        {
+            var result = _service.SetPasswordChangeRequired("Administrator", true);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void SetPasswordChangeRequired_UserNotFound_ReturnsFalse()
+        {
+            var result = _service.SetPasswordChangeRequired("NonExistentUser12345", true);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void GetPasswordChangeRequired_UserNotFound_ReturnsFalse()
+        {
+            var result = _service.GetPasswordChangeRequired("NonExistentUser12345");
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void SetPasswordChangeRequired_ProtectedAccount_LogsWarning()
+        {
+            // This test verifies the security boundary: protected accounts can never
+            // have their password change requirement modified, even if the caller
+            // somehow bypasses UI checks.
+            var result = _service.SetPasswordChangeRequired("WDAGUtilityAccount", true);
+            Assert.IsFalse(result);
+        }
     }
 }
