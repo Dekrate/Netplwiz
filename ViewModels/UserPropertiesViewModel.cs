@@ -46,6 +46,11 @@ namespace Netplwiz.ViewModels
         [ObservableProperty]
         private string _statusMessage = string.Empty;
 
+        [ObservableProperty]
+        private bool _passwordChangeRequired;
+
+        private readonly bool _originalPasswordChangeRequired;
+
         public UserPropertiesViewModel(UserAccount user, IUserService userService)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
@@ -54,8 +59,10 @@ namespace Netplwiz.ViewModels
             UserName = user.UserName;
             FullName = user.FullName;
             Description = user.Description;
+            PasswordChangeRequired = user.PasswordChangeRequired;
+            _originalPasswordChangeRequired = user.PasswordChangeRequired;
 
-            _logger.Information("UserPropertiesViewModel created for user: {UserName}", user.UserName);
+            _logger.Information("UserPropertiesViewModel created for user: {UserName}, PasswordChangeRequired={Required}", user.UserName, user.PasswordChangeRequired);
             LoadGroupsAsync(user);
         }
 
@@ -116,8 +123,16 @@ namespace Netplwiz.ViewModels
                     Description = Description
                 };
 
-                var success = await Task.Run(() => _userService.UpdateUser(updated));
-                if (success)
+                bool updateSuccess = await Task.Run(() => _userService.UpdateUser(updated));
+                bool passwordChangeSuccess = true;
+
+                if (PasswordChangeRequired != _originalPasswordChangeRequired)
+                {
+                    passwordChangeSuccess = await Task.Run(() =>
+                        _userService.SetPasswordChangeRequired(_originalUserName, PasswordChangeRequired));
+                }
+
+                if (updateSuccess && passwordChangeSuccess)
                 {
                     StatusMessage = "Zapisano pomyślnie";
                     _logger.Information("User saved successfully");
@@ -125,7 +140,8 @@ namespace Netplwiz.ViewModels
                 else
                 {
                     StatusMessage = "Nie udało się zapisać";
-                    _logger.Warning("Failed to save user");
+                    _logger.Warning("Failed to save user. UpdateUser={UpdateSuccess}, SetPasswordChangeRequired={PasswordSuccess}",
+                        updateSuccess, passwordChangeSuccess);
                 }
             }
             catch (Exception ex)

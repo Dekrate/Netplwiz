@@ -27,6 +27,8 @@ namespace Netplwiz.Services
         bool IsProtectedAccount(string userName);
         PasswordPolicy GetPasswordPolicy();
         bool SetPasswordPolicy(PasswordPolicy policy);
+        bool SetPasswordChangeRequired(string userName, bool required);
+        bool GetPasswordChangeRequired(string userName);
     }
 
     public class UserService : IUserService
@@ -533,6 +535,90 @@ namespace Netplwiz.Services
             }
         }
 
+        public bool SetPasswordChangeRequired(string userName, bool required)
+        {
+            _logger.Information("Setting password change required for {UserName} to {Required}", userName, required);
+
+            if (IsProtectedAccount(userName))
+            {
+                _logger.Warning("Password change requirement blocked - protected account: {UserName}", userName);
+                return false;
+            }
+
+            try
+            {
+                using var context = new PrincipalContext(ContextType.Machine);
+                var user = UserPrincipal.FindByIdentity(context, userName);
+                if (user == null)
+                {
+                    _logger.Warning("Cannot set password change requirement - user not found: {UserName}", userName);
+                    return false;
+                }
+
+                if (required)
+                {
+                    user.ExpirePasswordNow();
+                    _logger.Information("Password expiration enforced for user: {UserName}", userName);
+                }
+                else
+                {
+                    if (user.GetUnderlyingObject() is DirectoryEntry entry)
+                    {
+                        entry.Properties["pwdLastSet"][0] = -1;
+                        entry.CommitChanges();
+                        _logger.Information("Password expiration cleared for user: {UserName}", userName);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to set password change requirement for user: {UserName}", userName);
+                return false;
+            }
+        }
+
+        public bool GetPasswordChangeRequired(string userName)
+        {
+            _logger.Debug("Checking password change required for user: {UserName}", userName);
+
+            try
+            {
+                using var context = new PrincipalContext(ContextType.Machine);
+                var user = UserPrincipal.FindByIdentity(context, userName);
+                if (user == null)
+                {
+                    _logger.Warning("Cannot check password change requirement - user not found: {UserName}", userName);
+                    return false;
+                }
+
+                if (user.PasswordNeverExpires)
+                {
+                    _logger.Debug("Password change not required - PasswordNeverExpires is set for {UserName}", userName);
+                    return false;
+                }
+
+                if (user.GetUnderlyingObject() is DirectoryEntry entry)
+                {
+                    var pwdLastSet = entry.Properties["pwdLastSet"]?.Value;
+                    if (pwdLastSet is long value)
+                    {
+                        var required = value == 0;
+                        _logger.Debug("Password change required for {UserName}: {Required}", userName, required);
+                        return required;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to check password change requirement for user: {UserName}", userName);
+                return false;
+            }
+        }
+
         private UserAccount MapToUserAccount(UserPrincipal user, PrincipalContext context)
         {
             var account = new UserAccount
@@ -577,6 +663,11 @@ namespace Netplwiz.Services
                     if (entry.Properties["PasswordAge"]?.Value is int ageSeconds)
                     {
                         account.PasswordAgeDays = ageSeconds / 86400;
+                    }
+
+                    if (entry.Properties["pwdLastSet"]?.Value is long pwdLastSet)
+                    {
+                        account.PasswordChangeRequired = pwdLastSet == 0;
                     }
                 }
             }

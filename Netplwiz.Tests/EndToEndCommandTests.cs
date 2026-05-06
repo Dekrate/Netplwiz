@@ -226,5 +226,90 @@ namespace Netplwiz.Tests
             Assert.IsTrue(result);
             _mock.Verify(s => s.SetPasswordPolicy(policy), Times.Once);
         }
+
+        [TestMethod]
+        public async Task E2E_ForcePasswordChange_SaveFlow()
+        {
+            var user = new UserAccount { UserName = "Alice", FullName = "Alice Smith", PasswordChangeRequired = false };
+            _mock.Setup(s => s.UpdateUser(It.IsAny<UserAccount>())).Returns(true);
+            _mock.Setup(s => s.SetPasswordChangeRequired("Alice", true)).Returns(true);
+
+            var pvm = new UserPropertiesViewModel(user, _mock.Object)
+            {
+                PasswordChangeRequired = true
+            };
+
+            await pvm.SaveAsync();
+
+            Assert.AreEqual("Zapisano pomyślnie", pvm.StatusMessage);
+            _mock.Verify(s => s.SetPasswordChangeRequired("Alice", true), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task E2E_ForcePasswordChange_Unchanged_DoesNotCallService()
+        {
+            var user = new UserAccount { UserName = "Alice", FullName = "Alice Smith", PasswordChangeRequired = false };
+            _mock.Setup(s => s.UpdateUser(It.IsAny<UserAccount>())).Returns(true);
+
+            var pvm = new UserPropertiesViewModel(user, _mock.Object);
+
+            await pvm.SaveAsync();
+
+            _mock.Verify(s => s.SetPasswordChangeRequired(It.IsAny<string>(), It.IsAny<bool>()), Times.Never);
+        }
+
+        [TestMethod]
+        public async Task E2E_ForcePasswordChange_ClearRequirement_Success()
+        {
+            var user = new UserAccount { UserName = "Alice", FullName = "Alice Smith", PasswordChangeRequired = true };
+            _mock.Setup(s => s.UpdateUser(It.IsAny<UserAccount>())).Returns(true);
+            _mock.Setup(s => s.SetPasswordChangeRequired("Alice", false)).Returns(true);
+
+            var pvm = new UserPropertiesViewModel(user, _mock.Object)
+            {
+                PasswordChangeRequired = false
+            };
+
+            await pvm.SaveAsync();
+
+            Assert.AreEqual("Zapisano pomyślnie", pvm.StatusMessage);
+            _mock.Verify(s => s.SetPasswordChangeRequired("Alice", false), Times.Once);
+        }
+
+        [TestMethod]
+        public void E2E_ForcePasswordChange_ProtectedAccount_Blocked()
+        {
+            var realService = new UserService();
+            var result = realService.SetPasswordChangeRequired("Administrator", true);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void E2E_ForcePasswordChange_GetPasswordChangeRequired_DelegatesToService()
+        {
+            _mock.Setup(s => s.GetPasswordChangeRequired("Alice")).Returns(true);
+
+            var result = _mock.Object.GetPasswordChangeRequired("Alice");
+
+            Assert.IsTrue(result);
+            _mock.Verify(s => s.GetPasswordChangeRequired("Alice"), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task E2E_ForcePasswordChange_ServiceFailure_ReportsError()
+        {
+            var user = new UserAccount { UserName = "Alice", PasswordChangeRequired = false };
+            _mock.Setup(s => s.UpdateUser(It.IsAny<UserAccount>())).Returns(true);
+            _mock.Setup(s => s.SetPasswordChangeRequired("Alice", true)).Returns(false);
+
+            var pvm = new UserPropertiesViewModel(user, _mock.Object)
+            {
+                PasswordChangeRequired = true
+            };
+
+            await pvm.SaveAsync();
+
+            StringAssert.Contains(pvm.StatusMessage, "Nie udało się zapisać");
+        }
     }
 }
