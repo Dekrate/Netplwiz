@@ -73,6 +73,20 @@ namespace Netplwiz.Tests
         }
 
         [TestMethod]
+        public void SelectedUser_ProtectedUser_RemoveUserDisabled()
+        {
+            _mockService.Setup(s => s.IsProtectedAccount("Admin")).Returns(true);
+            var vm = new MainViewModel(_mockService.Object)
+            {
+                SelectedUser = new UserAccount { UserName = "Admin" }
+            };
+
+            Assert.IsFalse(vm.RemoveUserCommand.CanExecute(null));
+            Assert.IsTrue(vm.PropertiesCommand.CanExecute(null));
+            Assert.IsTrue(vm.ResetPasswordCommand.CanExecute(null));
+        }
+
+        [TestMethod]
         public void DeleteUser_CallsService()
         {
             _mockService.Setup(s => s.DeleteUser("Test")).Returns(true);
@@ -197,6 +211,53 @@ namespace Netplwiz.Tests
             vm.AddLocalUserCommand.Execute(null);
 
             Assert.IsTrue(eventFired);
+        }
+
+        [TestMethod]
+        public void UserDetailsCommand_RaisesEvent_WhenUserSelected()
+        {
+            var vm = new MainViewModel(_mockService.Object)
+            {
+                SelectedUser = new UserAccount { UserName = "Test" }
+            };
+            var eventFired = false;
+            vm.RequestUserDetails += (_, _) => eventFired = true;
+
+            vm.UserDetailsCommand.Execute(null);
+
+            Assert.IsTrue(eventFired);
+        }
+
+        [TestMethod]
+        public void UserDetailsCommand_Disabled_WhenNoUserSelected()
+        {
+            var vm = new MainViewModel(_mockService.Object) { SelectedUser = null };
+            Assert.IsFalse(vm.UserDetailsCommand.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EditPasswordPolicyCommand_RaisesEvent()
+        {
+            var vm = new MainViewModel(_mockService.Object);
+            var eventFired = false;
+            vm.RequestEditPasswordPolicy += (_, _) => eventFired = true;
+
+            vm.EditPasswordPolicyCommand.Execute(null);
+
+            Assert.IsTrue(eventFired);
+        }
+
+        [TestMethod]
+        public void SetPasswordPolicy_CallsService()
+        {
+            var policy = new PasswordPolicy { MinimumPasswordLength = 8, AccountLockoutThreshold = 3 };
+            _mockService.Setup(s => s.SetPasswordPolicy(policy)).Returns(true);
+            var vm = new MainViewModel(_mockService.Object);
+
+            var result = vm.SetPasswordPolicy(policy);
+
+            Assert.IsTrue(result);
+            _mockService.Verify(s => s.SetPasswordPolicy(policy), Times.Once);
         }
     }
 }

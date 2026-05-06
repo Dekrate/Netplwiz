@@ -1,0 +1,66 @@
+<ContentDialog
+    x:Class="Netplwiz.Views.AccountPolicyDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Polityka haseł"
+    PrimaryButtonText="Zapisz"
+    CloseButtonText="Anuluj"
+    DefaultButton="Primary"
+    CornerRadius="12">
+
+    <ContentDialog.PrimaryButtonStyle>
+        <Style BasedOn="{StaticResource AccentButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.PrimaryButtonStyle>
+    <ContentDialog.CloseButtonStyle>
+        <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.CloseButtonStyle>
+
+    <Grid RowSpacing="12" ColumnSpacing="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                   Text="Zmiana polityki wymaga uprawnień administratora."
+                   Foreground="Red" TextWrapping="Wrap" FontSize="12" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Min. długość hasła:" VerticalAlignment="Center" />
+        <NumberBox Grid.Row="1" Grid.Column="1" x:Name="MinLengthBox" Minimum="0" Maximum="14" SpinButtonPlacementMode="Inline" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Max. wiek hasła (dni):" VerticalAlignment="Center" />
+        <NumberBox Grid.Row="2" Grid.Column="1" x:Name="MaxAgeBox" Minimum="0" Maximum="999" SpinButtonPlacementMode="Inline" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Min. wiek hasła (dni):" VerticalAlignment="Center" />
+        <NumberBox Grid.Row="3" Grid.Column="1" x:Name="MinAgeBox" Minimum="0" Maximum="998" SpinButtonPlacementMode="Inline" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Historia haseł:" VerticalAlignment="Center" />
+        <NumberBox Grid.Row="4" Grid.Column="1" x:Name="HistoryBox" Minimum="0" Maximum="24" SpinButtonPlacementMode="Inline" />
+
+        <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="ComplexityCheck"
+                  Content="Wymagaj złożoności haseł" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Próg blokady:" VerticalAlignment="Center" />
+        <NumberBox Grid.Row="6" Grid.Column="1" x:Name="LockoutThresholdBox" Minimum="0" Maximum="999" SpinButtonPlacementMode="Inline" />
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Czas trwania blokady (min):" VerticalAlignment="Center" />
+        <NumberBox Grid.Row="7" Grid.Column="1" x:Name="LockoutDurationBox" Minimum="0" Maximum="99999" SpinButtonPlacementMode="Inline" />
+    </Grid>
+</ContentDialog>

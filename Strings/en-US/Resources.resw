@@ -24,6 +24,9 @@
   <data name="PropertiesButton.Content" xml:space="preserve">
     <value>Properties</value>
   </data>
+  <data name="UserDetailsButton.Content" xml:space="preserve">
+    <value>Details</value>
+  </data>
   <data name="PasswordSectionHeader.Text" xml:space="preserve">
     <value>Password</value>
   </data>
@@ -56,6 +59,12 @@
   </data>
   <data name="SecureLogonCheckBox.Content" xml:space="preserve">
     <value>Require users to press Ctrl+Alt+Delete</value>
+  </data>
+  <data name="PasswordPolicyDescription.Text" xml:space="preserve">
+    <value>View and edit the local password policy for this computer (min. length, expiration, account lockout).</value>
+  </data>
+  <data name="PasswordPolicyButton.Content" xml:space="preserve">
+    <value>Edit policy...</value>
   </data>
   <data name="StatusLoading.Text" xml:space="preserve">
     <value>Loading users...</value>

@@ -19,7 +19,7 @@ namespace Netplwiz.ViewModels
         private ObservableCollection<UserAccount> _users = new();
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(RemoveUserCommand), nameof(PropertiesCommand), nameof(ResetPasswordCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RemoveUserCommand), nameof(PropertiesCommand), nameof(ResetPasswordCommand), nameof(UserDetailsCommand))]
         private UserAccount? _selectedUser;
 
         [ObservableProperty]
@@ -70,6 +70,8 @@ namespace Netplwiz.ViewModels
         public event EventHandler<UserAccount>? RequestUserProperties;
         public event EventHandler<UserAccount>? RequestRemoveUser;
         public event EventHandler<UserAccount>? RequestResetPassword;
+        public event EventHandler<UserAccount>? RequestUserDetails;
+        public event EventHandler? RequestEditPasswordPolicy;
 
         [RelayCommand]
         public async Task LoadUsersAsync()
@@ -138,7 +140,7 @@ namespace Netplwiz.ViewModels
             }
         }
 
-        [RelayCommand(CanExecute = nameof(CanExecuteUserAction))]
+        [RelayCommand(CanExecute = nameof(CanRemoveUser))]
         private void RemoveUser()
         {
             if (SelectedUser == null) return;
@@ -160,6 +162,27 @@ namespace Netplwiz.ViewModels
             if (SelectedUser == null) return;
             _logger.Information("Reset password requested for: {UserName}", SelectedUser.UserName);
             RequestResetPassword?.Invoke(this, SelectedUser);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteUserAction))]
+        private void UserDetails()
+        {
+            if (SelectedUser == null) return;
+            _logger.Information("User details requested for: {UserName}", SelectedUser.UserName);
+            RequestUserDetails?.Invoke(this, SelectedUser);
+        }
+
+        [RelayCommand]
+        private void EditPasswordPolicy()
+        {
+            _logger.Information("Edit password policy requested");
+            RequestEditPasswordPolicy?.Invoke(this, EventArgs.Empty);
+        }
+
+        public bool SetPasswordPolicy(PasswordPolicy policy)
+        {
+            _logger.Information("Setting password policy via ViewModel");
+            return _userService.SetPasswordPolicy(policy);
         }
 
         public bool DeleteUser(string userName)
@@ -222,6 +245,12 @@ namespace Netplwiz.ViewModels
                 SecureLogonRequired = !SecureLogonRequired;
             }
         }
+
+        public PasswordPolicy GetPasswordPolicy() => _userService.GetPasswordPolicy();
+
+        public bool IsProtectedAccount(string userName) => _userService.IsProtectedAccount(userName);
+
+        private bool CanRemoveUser() => SelectedUser != null && !IsProtectedAccount(SelectedUser.UserName);
 
         private bool CanExecuteUserAction() => SelectedUser != null;
     }

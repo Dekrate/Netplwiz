@@ -24,6 +24,9 @@
   <data name="PropertiesButton.Content" xml:space="preserve">
     <value>Właściwości</value>
   </data>
+  <data name="UserDetailsButton.Content" xml:space="preserve">
+    <value>Szczegóły</value>
+  </data>
   <data name="PasswordSectionHeader.Text" xml:space="preserve">
     <value>Hasło</value>
   </data>
@@ -56,6 +59,12 @@
   </data>
   <data name="SecureLogonCheckBox.Content" xml:space="preserve">
     <value>Żądaj od użytkowników naciśnięcia klawiszy Ctrl+Alt+Delete</value>
+  </data>
+  <data name="PasswordPolicyDescription.Text" xml:space="preserve">
+    <value>Wyświetl i edytuj lokalną politykę haseł dla tego komputera (min. długość, ważność, blokada konta).</value>
+  </data>
+  <data name="PasswordPolicyButton.Content" xml:space="preserve">
+    <value>Edytuj politykę...</value>
   </data>
   <data name="StatusLoading.Text" xml:space="preserve">
     <value>Ładowanie użytkowników...</value>

@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Netplwiz.Models;
 
 namespace Netplwiz.Views
 {
@@ -11,9 +12,16 @@ namespace Netplwiz.Views
         public string NewDescription => DescriptionTextBox.Text.Trim();
         public bool IsAdministrator => AdminCheckBox.IsChecked ?? false;
 
-        public AddUserDialog()
+        public PasswordPolicy? PasswordPolicy { get; set; }
+
+        public AddUserDialog(PasswordPolicy? policy = null)
         {
             this.InitializeComponent();
+            PasswordPolicy = policy;
+            if (policy != null)
+            {
+                PolicyHintTextBlock.Text = "Wymagania hasła: " + policy.GetPolicyDescription();
+            }
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -35,6 +43,13 @@ namespace Netplwiz.Views
             if (PasswordBox.Password != ConfirmPasswordBox.Password)
             {
                 ShowError("Hasła nie są zgodne.");
+                args.Cancel = true;
+                return;
+            }
+
+            if (PasswordPolicy != null && !PasswordPolicy.IsPasswordValid(PasswordBox.Password, out string? error))
+            {
+                ShowError(error ?? "Hasło nie spełnia wymagań polityki.");
                 args.Cancel = true;
                 return;
             }

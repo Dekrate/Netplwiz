@@ -82,6 +82,9 @@
             <Button
                 Command="{Binding PropertiesCommand}"
                 x:Uid="PropertiesButton" />
+            <Button
+                Command="{Binding UserDetailsCommand}"
+                x:Uid="UserDetailsButton" />
         </StackPanel>
 
         <!-- Password section for selected user -->

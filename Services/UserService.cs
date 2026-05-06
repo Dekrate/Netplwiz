@@ -3,8 +3,10 @@ using Netplwiz.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 
 namespace Netplwiz.Services
@@ -23,10 +25,54 @@ namespace Netplwiz.Services
         void OpenAddUserDialog();
         bool AddLocalUser(string userName, string password, string fullName, string description, bool isAdministrator);
         bool IsProtectedAccount(string userName);
+        PasswordPolicy GetPasswordPolicy();
+        bool SetPasswordPolicy(PasswordPolicy policy);
     }
 
     public class UserService : IUserService
     {
+        // P/Invoke for reading password policy via NetUserModalsGet
+        [DllImport("netapi32.dll", CharSet = CharSet.Unicode)]
+        private static extern int NetUserModalsGet(
+            string? serverName,
+            int level,
+            out IntPtr bufPtr);
+
+        [DllImport("netapi32.dll")]
+        private static extern int NetApiBufferFree(IntPtr bufPtr);
+
+        [DllImport("netapi32.dll", CharSet = CharSet.Unicode)]
+        private static extern int NetUserModalsSet(
+            string? serverName,
+            int level,
+            ref USER_MODALS_INFO_0 buf,
+            out int parm_err);
+
+        [DllImport("netapi32.dll", CharSet = CharSet.Unicode)]
+        private static extern int NetUserModalsSet(
+            string? serverName,
+            int level,
+            ref USER_MODALS_INFO_3 buf,
+            out int parm_err);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct USER_MODALS_INFO_0
+        {
+            public int min_passwd_len;
+            public int max_passwd_age;
+            public int min_passwd_age;
+            public int force_logoff;
+            public int password_hist_len;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct USER_MODALS_INFO_3
+        {
+            public int lockout_duration;
+            public int lockout_observation_window;
+            public int lockout_threshold;
+        }
+
         private static readonly ReadOnlyCollection<string> ProtectedAccounts = new List<string>
         {
             "administrator",
@@ -174,9 +220,10 @@ namespace Netplwiz.Services
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(newPassword))
+            var policy = GetPasswordPolicy();
+            if (!policy.IsPasswordValid(newPassword, out string? error))
             {
-                _logger.Warning("Password change blocked - empty password for: {UserName}", userName);
+                _logger.Warning("Password change blocked - policy violation for {UserName}: {Error}", userName, error);
                 return false;
             }
 
@@ -303,9 +350,10 @@ namespace Netplwiz.Services
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(password))
+            var policy = GetPasswordPolicy();
+            if (!policy.IsPasswordValid(password, out string? error))
             {
-                _logger.Warning("Add user blocked - empty password for: {UserName}", userName);
+                _logger.Warning("Add user blocked - password policy violation for {UserName}: {Error}", userName, error);
                 return false;
             }
 
@@ -356,6 +404,135 @@ namespace Netplwiz.Services
             }
         }
 
+        public PasswordPolicy GetPasswordPolicy()
+        {
+            _logger.Debug("Reading local password policy via NetUserModalsGet");
+            var policy = new PasswordPolicy
+            {
+                // Default safe values in case API fails
+                MinimumPasswordLength = 0,
+                MaximumPasswordAgeDays = 0,
+                MinimumPasswordAgeDays = 0,
+                PasswordHistoryLength = 0,
+                PasswordComplexityRequired = false,
+                ReversibleEncryptionEnabled = false,
+                AccountLockoutThreshold = 0,
+                AccountLockoutDurationMinutes = 0,
+                ResetLockoutCounterAfterMinutes = 0
+            };
+
+            try
+            {
+                // Level 0: basic password params
+                int result0 = NetUserModalsGet(null, 0, out IntPtr buffer0);
+                if (result0 == 0 && buffer0 != IntPtr.Zero)
+                {
+                    var info0 = Marshal.PtrToStructure<USER_MODALS_INFO_0>(buffer0);
+                    policy.MinimumPasswordLength = info0.min_passwd_len;
+                    policy.MaximumPasswordAgeDays = info0.max_passwd_age == int.MaxValue ? 0 : info0.max_passwd_age / 86400;
+                    policy.MinimumPasswordAgeDays = info0.min_passwd_age / 86400;
+                    policy.PasswordHistoryLength = info0.password_hist_len;
+                    NetApiBufferFree(buffer0);
+                }
+                else if (result0 != 0)
+                {
+                    _logger.Warning("NetUserModalsGet level 0 returned error code {Result}", result0);
+                }
+
+                // Level 3: lockout policy
+                int result3 = NetUserModalsGet(null, 3, out IntPtr buffer3);
+                if (result3 == 0 && buffer3 != IntPtr.Zero)
+                {
+                    var info3 = Marshal.PtrToStructure<USER_MODALS_INFO_3>(buffer3);
+                    policy.AccountLockoutThreshold = info3.lockout_threshold;
+                    policy.AccountLockoutDurationMinutes = info3.lockout_duration == int.MaxValue ? 0 : info3.lockout_duration / 60;
+                    policy.ResetLockoutCounterAfterMinutes = info3.lockout_observation_window == int.MaxValue ? 0 : info3.lockout_observation_window / 60;
+                    NetApiBufferFree(buffer3);
+                }
+                else if (result3 != 0)
+                {
+                    _logger.Warning("NetUserModalsGet level 3 returned error code {Result}", result3);
+                }
+
+                // Check complexity via registry (secedit/SceCli equivalent)
+                try
+                {
+                    using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                        @"SYSTEM\CurrentControlSet\Control\Lsa");
+                    var value = key?.GetValue("PasswordComplexity") as int?;
+                    if (value.HasValue)
+                    {
+                        policy.PasswordComplexityRequired = value.Value != 0;
+                    }
+                    else
+                    {
+                        // Default: Windows Home typically has complexity OFF
+                        policy.PasswordComplexityRequired = false;
+                        _logger.Debug("PasswordComplexity registry value not found; defaulting to false (Windows Home default)");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warning(ex, "Failed to read PasswordComplexity from registry; defaulting to false");
+                    policy.PasswordComplexityRequired = false;
+                }
+
+                _logger.Information("Password policy read: min length {MinLength}, complexity {Complexity}, lockout threshold {Lockout}",
+                    policy.MinimumPasswordLength, policy.PasswordComplexityRequired, policy.AccountLockoutThreshold);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to read password policy");
+            }
+
+            return policy;
+        }
+
+        public bool SetPasswordPolicy(PasswordPolicy policy)
+        {
+            _logger.Information("Setting password policy...");
+            try
+            {
+                var info0 = new USER_MODALS_INFO_0
+                {
+                    min_passwd_len = policy.MinimumPasswordLength,
+                    max_passwd_age = policy.MaximumPasswordAgeDays <= 0 ? int.MaxValue : policy.MaximumPasswordAgeDays * 86400,
+                    min_passwd_age = policy.MinimumPasswordAgeDays * 86400,
+                    password_hist_len = policy.PasswordHistoryLength,
+                    force_logoff = int.MaxValue // don't change
+                };
+
+                int result0 = NetUserModalsSet(null, 0, ref info0, out int _);
+                if (result0 != 0)
+                {
+                    _logger.Warning("NetUserModalsSet level 0 returned error code {Result}", result0);
+                    return false;
+                }
+
+                var info3 = new USER_MODALS_INFO_3
+                {
+                    lockout_threshold = policy.AccountLockoutThreshold,
+                    lockout_duration = policy.AccountLockoutDurationMinutes <= 0 ? int.MaxValue : policy.AccountLockoutDurationMinutes * 60,
+                    lockout_observation_window = policy.ResetLockoutCounterAfterMinutes <= 0 ? int.MaxValue : policy.ResetLockoutCounterAfterMinutes * 60
+                };
+
+                int result3 = NetUserModalsSet(null, 3, ref info3, out int _);
+                if (result3 != 0)
+                {
+                    _logger.Warning("NetUserModalsSet level 3 returned error code {Result}", result3);
+                    return false;
+                }
+
+                _logger.Information("Password policy updated successfully");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to set password policy");
+                return false;
+            }
+        }
+
         private UserAccount MapToUserAccount(UserPrincipal user, PrincipalContext context)
         {
             var account = new UserAccount
@@ -384,6 +561,28 @@ namespace Netplwiz.Services
             {
                 _logger.Warning(ex, "Failed to get groups for user {UserName}", account.UserName);
                 account.GroupsDisplay = "N/A";
+            }
+
+            try
+            {
+                if (user.GetUnderlyingObject() is DirectoryEntry entry)
+                {
+                    account.LastLogon = entry.Properties["LastLogin"]?.Value as DateTime?;
+                    account.BadPasswordCount = entry.Properties["BadPasswordAttempts"]?.Value as int? ?? 0;
+                    account.NumberOfLogons = entry.Properties["LogonCount"]?.Value as int? ?? 0;
+                    account.HomeDirectory = entry.Properties["HomeDirectory"]?.Value as string ?? string.Empty;
+                    account.ScriptPath = entry.Properties["ScriptPath"]?.Value as string ?? string.Empty;
+                    account.ProfilePath = entry.Properties["Profile"]?.Value as string ?? string.Empty;
+
+                    if (entry.Properties["PasswordAge"]?.Value is int ageSeconds)
+                    {
+                        account.PasswordAgeDays = ageSeconds / 86400;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Warning(ex, "Failed to read extended properties for user {UserName}", account.UserName);
             }
 
             return account;

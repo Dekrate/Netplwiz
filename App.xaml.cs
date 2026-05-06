@@ -64,6 +64,16 @@ namespace Netplwiz
             _logger.Information("MainPage navigated, activating window");
             window.Activate();
 
+            try
+            {
+                var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "appicon.ico");
+                if (File.Exists(iconPath) && window.AppWindow != null)
+                {
+                    window.AppWindow.SetIcon(iconPath);
+                }
+            }
+            catch { }
+
             _logger.Information("Application launched with {Backdrop} backdrop", CurrentBackdrop);
         }
 

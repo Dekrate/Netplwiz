@@ -7,8 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Padding="12" RowSpacing="16">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Padding="16" RowSpacing="16">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -17,39 +19,33 @@
         <!-- Passwords -->
         <Border
             Grid.Row="0"
-            Padding="12"
+            Padding="16"
             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="8">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+            <StackPanel Spacing="12">
                 <TextBlock
-                    Grid.Row="0"
                     x:Uid="ManagePasswordsDescription"
                     TextWrapping="Wrap" />
                 <Button
-                    Grid.Row="1"
-                    Margin="0,8,0,0"
                     HorizontalAlignment="Right"
                     Command="{Binding ManagePasswordsCommand}"
                     x:Uid="ManagePasswordsButton" />
-            </Grid>
+            </StackPanel>
         </Border>
 
         <!-- Advanced user management -->
         <Border
             Grid.Row="1"
-            Padding="12"
+            Padding="16"
             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="8">
-            <Grid>
+            <Grid RowSpacing="8" ColumnSpacing="12">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -60,10 +56,10 @@
 
                 <FontIcon
                     Grid.Row="0"
-                    Grid.RowSpan="2"
+                    Grid.RowSpan="3"
                     Grid.Column="0"
                     Margin="0,0,12,0"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     FontSize="24"
                     Glyph="&#xE77B;" />
 
@@ -75,31 +71,47 @@
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"
-                    Margin="0,4,0,0"
                     x:Uid="AdvancedManagementDescription"
                     TextWrapping="Wrap" />
 
                 <Button
-                    Grid.Row="1"
+                    Grid.Row="2"
                     Grid.Column="1"
-                    Margin="0,8,0,0"
                     HorizontalAlignment="Right"
                     Command="{Binding AdvancedUserManagementCommand}"
                     x:Uid="AdvancedManagementButton" />
             </Grid>
         </Border>
 
-        <!-- Secure logon -->
+        <!-- Password policy -->
         <Border
             Grid.Row="2"
-            Padding="12"
+            Padding="16"
             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="8">
-            <Grid RowSpacing="8">
+            <StackPanel Spacing="12">
+                <TextBlock
+                    x:Uid="PasswordPolicyDescription"
+                    TextWrapping="Wrap" />
+                <Button
+                    HorizontalAlignment="Right"
+                    Command="{Binding EditPasswordPolicyCommand}"
+                    x:Uid="PasswordPolicyButton" />
+            </StackPanel>
+        </Border>
+
+        <!-- Secure logon -->
+        <Border
+            Grid.Row="3"
+            Padding="16"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <Grid RowSpacing="8" ColumnSpacing="12">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -111,7 +123,7 @@
 
                 <FontIcon
                     Grid.Row="0"
-                    Grid.RowSpan="4"
+                    Grid.RowSpan="3"
                     Grid.Column="0"
                     Margin="0,0,12,0"
                     VerticalAlignment="Top"
@@ -137,5 +149,6 @@
                     x:Uid="SecureLogonCheckBox" />
             </Grid>
         </Border>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

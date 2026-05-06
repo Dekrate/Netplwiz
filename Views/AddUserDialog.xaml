@@ -33,6 +33,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBox
@@ -55,19 +56,26 @@
             Grid.Row="3"
             Header="Potwierdź hasło:" />
 
+        <TextBlock
+            x:Name="PolicyHintTextBlock"
+            Grid.Row="4"
+            FontSize="12"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            TextWrapping="Wrap" />
+
         <TextBox
             x:Name="DescriptionTextBox"
-            Grid.Row="4"
+            Grid.Row="5"
             Header="Opis:" />
 
         <CheckBox
             x:Name="AdminCheckBox"
-            Grid.Row="5"
+            Grid.Row="6"
             Content="Administrator" />
 
         <TextBlock
             x:Name="ErrorTextBlock"
-            Grid.Row="6"
+            Grid.Row="7"
             Foreground="{ThemeResource SystemErrorTextColor}"
             TextWrapping="Wrap"
             Visibility="Collapsed" />

@@ -22,6 +22,8 @@ namespace Netplwiz.Views
             ViewModel.RequestRemoveUser += OnRequestRemoveUser;
             ViewModel.RequestResetPassword += OnRequestResetPassword;
             ViewModel.RequestAddLocalUser += OnRequestAddLocalUser;
+            ViewModel.RequestUserDetails += OnRequestUserDetails;
+            ViewModel.RequestEditPasswordPolicy += OnRequestEditPasswordPolicy;
 
             // Initialize navigation
             MainNavigation.SelectedItem = UsersNavItem;
@@ -57,7 +59,8 @@ namespace Netplwiz.Views
         private async void OnRequestAddLocalUser(object? sender, EventArgs e)
         {
             _logger.Information("Showing add local user dialog");
-            var dialog = new AddUserDialog();
+            var policy = ViewModel.GetPasswordPolicy();
+            var dialog = new AddUserDialog(policy);
             dialog.XamlRoot = this.XamlRoot;
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
@@ -96,6 +99,7 @@ namespace Netplwiz.Views
         private async void OnRequestRemoveUser(object? sender, UserAccount user)
         {
             _logger.Information("Showing remove user confirmation for {UserName}", user.UserName);
+
             var dialog = new ContentDialog
             {
                 Title = "Konta użytkowników",
@@ -123,10 +127,44 @@ namespace Netplwiz.Views
             }
         }
 
+        private async void OnRequestUserDetails(object? sender, UserAccount user)
+        {
+            _logger.Information("Showing user details dialog for {UserName}", user.UserName);
+            var dialog = new UserDetailsDialog(user);
+            dialog.XamlRoot = this.XamlRoot;
+            await dialog.ShowAsync();
+        }
+
+        private async void OnRequestEditPasswordPolicy(object? sender, EventArgs e)
+        {
+            _logger.Information("Showing edit password policy dialog");
+            var policy = ViewModel.GetPasswordPolicy();
+            var dialog = new AccountPolicyDialog(policy);
+            dialog.XamlRoot = this.XamlRoot;
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                var newPolicy = dialog.GetPolicy();
+                _logger.Information("Saving password policy");
+                var success = ViewModel.SetPasswordPolicy(newPolicy);
+                if (success)
+                {
+                    _logger.Information("Password policy updated successfully");
+                    ViewModel.StatusMessage = "Polityka haseł została zaktualizowana";
+                }
+                else
+                {
+                    _logger.Warning("Failed to update password policy");
+                    ViewModel.StatusMessage = "Nie udało się zaktualizować polityki haseł (wymagane uprawnienia administratora)";
+                }
+            }
+        }
+
         private async void OnRequestResetPassword(object? sender, UserAccount user)
         {
             _logger.Information("Showing reset password dialog for {UserName}", user.UserName);
-            var dialog = new ResetPasswordDialog(user.UserName);
+            var policy = ViewModel.GetPasswordPolicy();
+            var dialog = new ResetPasswordDialog(user.UserName, policy);
             dialog.XamlRoot = this.XamlRoot;
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)

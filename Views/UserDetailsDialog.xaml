@@ -1,0 +1,98 @@
+<ContentDialog
+    x:Class="Netplwiz.Views.UserDetailsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Szczegóły konta"
+    CloseButtonText="OK"
+    DefaultButton="Close"
+    CornerRadius="12">
+
+    <ContentDialog.CloseButtonStyle>
+        <Style BasedOn="{StaticResource DefaultButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.CloseButtonStyle>
+
+    <ScrollViewer MaxHeight="500">
+        <Grid RowSpacing="8" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Nazwa użytkownika:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="UserNameText" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Pełna nazwa:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="FullNameText" />
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Opis:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="DescriptionText" TextWrapping="Wrap" />
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Domena:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="3" Grid.Column="1" x:Name="DomainText" />
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Grupy:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="GroupsText" TextWrapping="Wrap" />
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Administrator:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="5" Grid.Column="1" x:Name="IsAdminText" />
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Konto lokalne:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="6" Grid.Column="1" x:Name="IsLocalText" />
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="Wymagane hasło:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="7" Grid.Column="1" x:Name="PasswordRequiredText" />
+
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="Hasło nigdy nie wygasa:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="8" Grid.Column="1" x:Name="PasswordNeverExpiresText" />
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="Konto wyłączone:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="9" Grid.Column="1" x:Name="AccountDisabledText" />
+
+            <TextBlock Grid.Row="10" Grid.Column="0" Text="Konto zablokowane:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="10" Grid.Column="1" x:Name="AccountLockedOutText" />
+
+            <TextBlock Grid.Row="11" Grid.Column="0" Text="Ostatnie logowanie:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="11" Grid.Column="1" x:Name="LastLogonText" />
+
+            <TextBlock Grid.Row="12" Grid.Column="0" Text="Nieudane próby hasła:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="12" Grid.Column="1" x:Name="BadPasswordCountText" />
+
+            <TextBlock Grid.Row="13" Grid.Column="0" Text="Liczba logowań:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="13" Grid.Column="1" x:Name="NumberOfLogonsText" />
+
+            <TextBlock Grid.Row="14" Grid.Column="0" Text="Wiek hasła (dni):" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="14" Grid.Column="1" x:Name="PasswordAgeText" />
+
+            <TextBlock Grid.Row="15" Grid.Column="0" Text="Katalog domowy:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="15" Grid.Column="1" x:Name="HomeDirectoryText" TextWrapping="Wrap" />
+
+            <TextBlock Grid.Row="16" Grid.Column="0" Text="Ścieżka skryptu:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="16" Grid.Column="1" x:Name="ScriptPathText" TextWrapping="Wrap" />
+
+            <TextBlock Grid.Row="17" Grid.Column="0" Text="Ścieżka profilu:" FontWeight="SemiBold" />
+            <TextBlock Grid.Row="17" Grid.Column="1" x:Name="ProfilePathText" TextWrapping="Wrap" />
+        </Grid>
+    </ScrollViewer>
+</ContentDialog>

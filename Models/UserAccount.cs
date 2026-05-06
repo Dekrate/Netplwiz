@@ -14,5 +14,14 @@ namespace Netplwiz.Models
         public bool PasswordNeverExpires { get; set; }
         public bool AccountDisabled { get; set; }
         public bool AccountLockedOut { get; set; }
+
+        // Extended properties populated via DirectoryEntry
+        public System.DateTime? LastLogon { get; set; }
+        public int BadPasswordCount { get; set; }
+        public int NumberOfLogons { get; set; }
+        public string HomeDirectory { get; set; } = string.Empty;
+        public string ScriptPath { get; set; } = string.Empty;
+        public string ProfilePath { get; set; } = string.Empty;
+        public int PasswordAgeDays { get; set; }
     }
 }

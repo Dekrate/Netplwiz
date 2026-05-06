@@ -11,6 +11,12 @@
     DefaultButton="Primary"
     CornerRadius="12">
 
+    <ContentDialog.PrimaryButtonStyle>
+        <Style BasedOn="{StaticResource AccentButtonStyle}" TargetType="Button">
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </ContentDialog.PrimaryButtonStyle>
+
     <Grid RowSpacing="8" Padding="0,8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

@@ -146,11 +146,85 @@ namespace Netplwiz.Tests
         }
 
         [TestMethod]
-        public void E2E_SetPassword_ProtectedAccount_Blocked()
+        public void E2E_RemoveUserCommand_DisabledForProtectedUser()
         {
-            var realService = new UserService();
-            var result = realService.SetPassword("Guest", "AnyPass123!");
+            _mock.Setup(s => s.IsProtectedAccount("Administrator")).Returns(true);
+            _vm.SelectedUser = new UserAccount { UserName = "Administrator" };
+
+            Assert.IsFalse(_vm.RemoveUserCommand.CanExecute(null));
+            Assert.IsTrue(_vm.PropertiesCommand.CanExecute(null));
+            Assert.IsTrue(_vm.ResetPasswordCommand.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void E2E_DeleteUser_Flow()
+        {
+            _mock.Setup(s => s.DeleteUser("Alice")).Returns(true);
+            _vm.SelectedUser = new UserAccount { UserName = "Alice" };
+
+            var result = _vm.DeleteUser("Alice");
+
+            Assert.IsTrue(result);
+            _mock.Verify(s => s.DeleteUser("Alice"), Times.Once);
+        }
+
+        [TestMethod]
+        public void E2E_GetPasswordPolicy_DelegatesToService()
+        {
+            var policy = new PasswordPolicy { MinimumPasswordLength = 8, PasswordComplexityRequired = true };
+            _mock.Setup(s => s.GetPasswordPolicy()).Returns(policy);
+
+            var result = _vm.GetPasswordPolicy();
+
+            Assert.AreEqual(8, result.MinimumPasswordLength);
+            Assert.IsTrue(result.PasswordComplexityRequired);
+            _mock.Verify(s => s.GetPasswordPolicy(), Times.Once);
+        }
+
+        [TestMethod]
+        public void E2E_CreateLocalUser_PolicyViolation_ReturnsFalse()
+        {
+            _mock.Setup(s => s.AddLocalUser("Eve", "x", "", "", false)).Returns(false);
+
+            var result = _vm.CreateLocalUser("Eve", "x", "", "", false);
+
             Assert.IsFalse(result);
+            _mock.Verify(s => s.AddLocalUser("Eve", "x", "", "", false), Times.Once);
+        }
+
+        [TestMethod]
+        public void E2E_UserDetailsCommand_RaisesEvent()
+        {
+            _vm.SelectedUser = new UserAccount { UserName = "Alice" };
+            var eventFired = false;
+            _vm.RequestUserDetails += (_, _) => eventFired = true;
+
+            _vm.UserDetailsCommand.Execute(null);
+
+            Assert.IsTrue(eventFired);
+        }
+
+        [TestMethod]
+        public void E2E_EditPasswordPolicyCommand_RaisesEvent()
+        {
+            var eventFired = false;
+            _vm.RequestEditPasswordPolicy += (_, _) => eventFired = true;
+
+            _vm.EditPasswordPolicyCommand.Execute(null);
+
+            Assert.IsTrue(eventFired);
+        }
+
+        [TestMethod]
+        public void E2E_SetPasswordPolicy_DelegatesToService()
+        {
+            var policy = new PasswordPolicy { MinimumPasswordLength = 10, AccountLockoutThreshold = 5 };
+            _mock.Setup(s => s.SetPasswordPolicy(policy)).Returns(true);
+
+            var result = _vm.SetPasswordPolicy(policy);
+
+            Assert.IsTrue(result);
+            _mock.Verify(s => s.SetPasswordPolicy(policy), Times.Once);
         }
     }
 }
